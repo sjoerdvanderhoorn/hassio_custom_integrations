@@ -1,4 +1,4 @@
-# Custom Integrations
+# Home Assistant Custom Integrations
 
 **The last Home Assistant integration that ever needs to be developed.**
 
@@ -22,6 +22,8 @@ Click **Add integration**, then **Create custom integration**. The agent prepare
 
 Your integrations appear in Home Assistant's normal integration list. Open one and choose **Edit custom integration** to continue the conversation. Previous chats remain available; the dropdown offers **Share** and **Uninstall**. Home Assistant's normal setup and Add entry/device controls remain available where supported.
 
+![From a request in chat to a working aircraft-counting integration with Home Assistant entities.](https://raw.githubusercontent.com/sjoerdvanderhoorn/hassio_custom_integrations/main/docs/images/custom-integrations-workflow.png)
+
 ## The bigger idea
 
 The ambition is to make integration development disappear as a separate task. “I have a new lamp—please add it” should be enough: reuse an existing connection when possible, extend it when needed, and create something new when nothing fits.
@@ -33,6 +35,10 @@ That is the direction. This release creates and maintains custom integrations; a
 ## Get started
 
 Requires **Home Assistant 2026.11+**, an administrator account and an **OpenAI Platform API key**. New installations default to `gpt-6.1-sol`.
+
+<!-- ha-marketplace:exclude-start -->
+[![Open your Home Assistant instance and add this integration repository in the Marketplace.](https://my.home-assistant.io/badges/marketplace_repository.svg)](https://my.home-assistant.io/redirect/marketplace_repository/?owner=sjoerdvanderhoorn&repository=hassio_custom_integrations&category=integration)
+<!-- ha-marketplace:exclude-end -->
 
 Install `sjoerdvanderhoorn/hassio_custom_integrations` as an **Integration** repository in Marketplace/HACS, restart Home Assistant, then add **Custom Integrations** under Settings → Devices & services. Manual installation is also supported.
 

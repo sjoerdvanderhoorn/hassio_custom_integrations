@@ -1,0 +1,26 @@
+{
+  "domain": "custom_integrations",
+  "name": "Custom Integrations",
+  "codeowners": [
+    "@sjoerdvanderhoorn"
+  ],
+  "config_flow": true,
+  "dependencies": [
+    "frontend",
+    "http"
+  ],
+  "documentation": "https://github.com/sjoerdvanderhoorn/hassio_custom_integrations",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/sjoerdvanderhoorn/hassio_custom_integrations/issues",
+  "requirements": [
+    "fastapi==0.163.1",
+    "openai>=3.26.0",
+    "httpx==0.28.1",
+    "websocket-client==1.9.2",
+    "markdown-it-py==4.3.0",
+    "nh3==0.3.8"
+  ],
+  "single_config_entry": true,
+  "version": "1.0.0"
+}

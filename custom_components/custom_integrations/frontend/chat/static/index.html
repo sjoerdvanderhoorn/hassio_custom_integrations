@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><title>Custom Integrations</title><link rel="stylesheet" href="static/style.css"><script src="static/app.js" defer></script></head>
+<body>
+<header class="app-bar"><button id="menu" class="icon-button" aria-label="Toggle navigation">☰</button><span class="home-icon" aria-hidden="true">⌂</span><strong>Custom Integrations</strong><button id="toggle-panel" class="icon-button" aria-label="Toggle integration details" aria-controls="integration-panel" aria-expanded="true"></button></header>
+<div class="layout">
+<aside class="sidebar" aria-label="Navigation"><div class="section-heading"><h2 data-i18n="integrations">Integrations</h2><button id="new" title="Add integration" class="icon-button" aria-label="New integration">＋</button></div><nav id="integrations" aria-label="Integrations"></nav>
+<div class="bottom"><div id="ha-status" role="status"></div><div id="key-status" class="hint"></div></div></aside>
+<main class="main"><header class="chat-header"><strong id="chat-title" data-i18n="newIntegration">New integration</strong><button id="show-details" class="text-button" data-i18n="details">Details</button></header>
+<div id="chat" class="chat" aria-label="Conversation"><div class="welcome"><h1 data-i18n="welcome">What would you like to build?</h1><p data-i18n="intro">Describe a device, share documentation, or ask for a change.</p></div></div>
+<div class="composer-area"><div id="pending" aria-live="polite"></div><form id="composer"><label class="sr-only" for="message" data-i18n="message">Message the agent</label><textarea id="message" rows="1" required placeholder="Message the agent…"></textarea><button id="send" class="icon-button send-button" type="submit" aria-label="Send message"></button><button id="stop" class="icon-button stop-button" type="button" aria-label="Stop agent" hidden></button></form><p id="connection-error" role="status"></p></div></main>
+<aside id="integration-panel" class="integration-panel" aria-label="Integration details"><header class="panel-header"><span data-i18n="details">Integration details</span><button id="close-integrations" class="icon-button" aria-label="Close integration details">✕</button></header><div id="integration-error" role="status"></div><div id="integration-details"><p class="hint" data-i18n="select">Select an integration or conversation to see its details.</p></div></aside>
+</div>
+
+<dialog id="logs-dialog" aria-labelledby="logs-title"><header><h2 id="logs-title">Logs</h2><button id="close-logs" class="icon-button" aria-label="Close logs">✕</button></header><p id="logs-description"></p><pre id="raw-logs" tabindex="0"></pre></dialog>
+<input id="integration-upload" type="file" accept=".zip,application/zip" hidden>
+</body></html>

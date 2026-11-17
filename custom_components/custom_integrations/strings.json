@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Create and maintain custom integrations with an AI agent. Configure an OpenAI Platform API key. Generated code can run with Home Assistant permissions after approval.",
+        "data": {
+          "openai_api_key": "OpenAI API key",
+          "model": "Model",
+          "auto_deploy": "Automatically approve code deployment",
+          "auto_restart": "Automatically approve Core restarts"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Enter an OpenAI API key.",
+      "missing_model": "Enter a model name."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations options",
+        "description": "Leave the API key empty to keep the current key. Device tests and uninstall always require explicit approval.",
+        "data": {
+          "openai_api_key": "Replacement OpenAI API key",
+          "model": "Model",
+          "auto_deploy": "Automatically approve code deployment",
+          "auto_restart": "Automatically approve Core restarts"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Enter a model name."
+    }
+  }
+}

@@ -1,10 +1,12 @@
 # Custom Integrations
 
-**The last integration you should ever need to develop.**
+**The last Home Assistant integration that ever needs to be developed.**
 
 Tell Home Assistant what you need. Custom Integrations uses an AI agent to research, write, install and improve integrations through a conversation—right inside Home Assistant. Connect an unfamiliar device, turn a website into a sensor, or combine several sources into one useful entity.
 
 ## What can you build?
+
+Anything!
 
 - A parcel tracker with delivery updates and an estimated arrival time.
 - Sensors for your municipality's collection schedules or local announcements.

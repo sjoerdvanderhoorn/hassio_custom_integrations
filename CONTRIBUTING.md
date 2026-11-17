@@ -28,6 +28,6 @@ Preserve administrator authorization, path/archive boundaries, code backups, exp
 
 ## Release
 
-Update the manifest and const.py versions together. Verify backend/browser tests and official validators. Test installation/options, UI attachment, native actions, approved generation/update/removal, Core restart/recovery and non-admin access on a disposable HA instance. Publish a full GitHub release with source ZIP and checksum. Marketplace catalog acceptance is an external review; a passing source validator is not runtime certification.
+Update the manifest and const.py versions together. Verify backend/browser tests and official validators. Test installation/options, UI attachment, native actions, approved generation/update/removal, Core restart/recovery and non-admin access on a disposable HA instance. A main-branch commit whose message begins with `Release `, or a manual validation workflow run, publishes the versioned GitHub release with a source ZIP and checksum after every validation job passes. Existing releases on a different commit are preserved; increment the version for another release. Marketplace catalog acceptance is an external review; a passing source validator is not runtime certification.
 
 The public repository must have a description, topics, issues enabled, README and license. Follow the [catalog guide](https://contributors.home-assistant.io/marketplace/guides/catalog/) and [repository requirements](https://contributors.home-assistant.io/marketplace/reference/repository-structure/) before a catalog submission.

@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Creați și întrețineți integrări personalizate cu un agent AI. Configurați o cheie API OpenAI Platform. După aprobare, codul generat poate rula cu permisiunile Home Assistant.",
+        "data": {
+          "openai_api_key": "Cheie API OpenAI",
+          "model": "Model",
+          "auto_deploy": "Aprobă automat implementarea codului",
+          "auto_restart": "Aprobă automat repornirile Core"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Introduceți o cheie API OpenAI.",
+      "missing_model": "Introduceți un nume de model."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations este deja configurat."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opțiuni Custom Integrations",
+        "description": "Lăsați cheia API necompletată pentru a păstra cheia actuală. Testele dispozitivelor și dezinstalarea necesită întotdeauna aprobare explicită.",
+        "data": {
+          "openai_api_key": "Cheie API OpenAI de înlocuire",
+          "model": "Model",
+          "auto_deploy": "Aprobă automat implementarea codului",
+          "auto_restart": "Aprobă automat repornirile Core"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Introduceți un nume de model."
+    }
+  }
+}

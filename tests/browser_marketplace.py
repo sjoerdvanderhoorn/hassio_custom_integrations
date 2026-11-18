@@ -25,7 +25,7 @@ class Handler(BaseHTTPRequestHandler):
 server=ThreadingHTTPServer(('127.0.0.1',0),Handler);threading.Thread(target=server.serve_forever,daemon=True).start();origin=f'http://127.0.0.1:{server.server_port}'
 items=[{'domain':'parcel_tracker','name':'Parcel Tracker','installed':True},{'domain':'school_updates','name':'School Updates','installed':False}]
 conversations=[{'id':'first','title':'Parcel setup','domains':['parcel_tracker'],'updated':'2026-11-17T10:00:00Z'},{'id':'last','title':'Add delivery estimate','domains':['parcel_tracker'],'updated':'2026-11-17T12:00:00Z'}]
-auth=[];mode={'offline':False,'chat':None,'uninstalled':False,'long':False,'tail':False}
+auth=[];mode={'offline':False,'chat':None,'uninstalled':False,'long':False,'tail':False,'discovery':False,'retry':False,'retried':False}
 def api(route):
  auth.append(route.request.headers.get('authorization'))
  path=route.request.url.split('/engine/')[1]
@@ -34,8 +34,12 @@ def api(route):
  elif path.startswith('api/conversations/'):
   ident=path.split('/')[-1];conv=next((c for c in conversations if c['id']==ident),{'id':ident,'title':'New request','domains':[]})
   data={**conv,'messages':[{'role':'user','content':'Add a delivery estimate'},{'role':'assistant','content':'Ready','rendered_content':'<h2>How to test</h2><p><strong>Track a parcel.</strong></p>'}],'jobs':[],'installations':[]}
+  if mode['discovery']:data['messages'][-1]['integration_discovery']={'summary':'This existing integration supports the requested lamp.','matches':[{'domain':'hue','name':'Philips Hue','url':'https://www.home-assistant.io/integrations/hue/','reason':'Existing bridge support'}]}
+  if mode['retry'] or mode.get('actions'):
+   data['jobs']=[{'id':'test','status':'failed' if mode['retry'] else 'working','retryable':mode['retry'],'can_steer':True,'after_message':1,'steps':[{'id':'read','tool':'read_integration_files','label':'Reading 4 integration files','status':'done','started':'2026-11-18T10:00:00Z','finished':'2026-11-18T10:00:01Z','arguments':{'paths':['manifest.json','__init__.py']},'result':{'ok':True}},{'id':'write','tool':'write_files','label':'Updating 2 integration files','status':'working','started':'2026-11-18T10:00:02Z','arguments':{},'result':None}],'events':[{'kind':'retry','message':'Connection interrupted. Retrying 3/3 by reconnecting to the same agent session.'}] if mode['retry'] else [],'approval':None}]
   if mode['long']:data['messages'][-1].update(content='Long response'+str(mode['tail']),rendered_content='<p>Earlier content</p>'*80+('<p>Newest streamed content</p>' if mode['tail'] else ''))
- elif path=='api/chat':mode['chat']=route.request.post_data_json;data={'conversation_id':'last','job_id':'test'}
+ elif path=='api/jobs/test/retry':mode['retry']=False;mode['retried']=True;data={'conversation_id':'last','job_id':'test'}
+ elif path=='api/chat':mode['chat']=route.request.post_data_json;mode['discovery']=False;data={'conversation_id':'last','job_id':'test'}
  elif path.startswith('api/jobs/'):data={'id':'test','status':'done','steps':[],'events':[],'approval':None}
  elif path.endswith('/share'):return route.fulfill(content_type='application/zip',body='code zip')
  elif path.endswith('/uninstall'):
@@ -71,10 +75,10 @@ with sync_playwright() as p:
  frame.locator('#message').press('Escape');expect(page.locator('ci-chat-modal')).to_have_count(0)
  page.locator('#native-add').click();page.get_by_role('button',name='Create custom integration',exact=True).click();frame=page.frame_locator('ci-chat-modal iframe')
  expect(frame.locator('#conversation-picker')).to_be_hidden();expect(frame.locator('aside')).to_have_count(0);expect(frame.locator('#integration-panel')).to_be_hidden()
- frame.locator('#message').fill('Build a parcel tracker');frame.locator('#message').press('Enter');expect(frame.locator('#message')).to_have_value('Build a parcel tracker\n')
+ frame.locator('#message').fill('Build a parcel tracker');frame.locator('#message').press('Shift+Enter');expect(frame.locator('#message')).to_have_value('Build a parcel tracker\n');frame.locator('#message').press('Control+Enter');expect(frame.locator('#message')).to_have_value('Build a parcel tracker\n\n');frame.locator('#message').press('Enter');expect(frame.locator('#message')).to_have_value('')
  page.get_by_role('button',name='Close chat').click();expect(page.locator('ci-chat-modal')).to_have_count(0)
  page.evaluate("history.pushState(null,'','/config/integrations/integration/parcel_tracker');window.dispatchEvent(new CustomEvent('location-changed'))");expect(page).to_have_url(origin+'/config/integrations/integration/parcel_tracker')
- edit=page.get_by_role('button',name='Edit custom integration',exact=True);expect(edit).to_be_visible()
+ edit=page.get_by_role('button',name='Edit custom integration',exact=True);expect(edit).to_be_visible(timeout=750)
  assert page.locator('ci-integration-actions').evaluate('(el)=>el.parentElement.classList.contains("actions")')
  add_box=page.locator('#add-entry').bounding_box();edit_box=edit.bounding_box();assert abs((add_box['y']+add_box['height']/2)-(edit_box['y']+edit_box['height']/2))<2
  page.locator('#add-entry').click();page.locator('#add-device').click();assert page.evaluate('window["add-entry"]')==1 and page.evaluate('window["add-device"]')==1
@@ -87,7 +91,31 @@ with sync_playwright() as p:
  edit.click();frame=page.frame_locator('ci-chat-modal iframe')
  frame.locator('#conversation-picker').select_option('last');expect(frame.locator('#chat h2')).to_have_text('How to test');expect(frame.locator('#chat strong')).to_have_text('Track a parcel.')
  expect(frame.get_by_text('Activity',exact=True)).to_have_count(0);expect(frame.get_by_text('Entities',exact=True)).to_have_count(0)
- frame.locator('#message').fill('Check the estimate');frame.locator('#message').press('Control+Enter');expect(frame.locator('#message')).to_have_value('');assert mode['chat']['conversation_id']=='last'
+ frame.locator('#message').fill('Check the estimate');frame.locator('#message').press('Enter');expect(frame.locator('#message')).to_have_value('');assert mode['chat']['conversation_id']=='last'
+ mode['actions']=True
+ expect(frame.locator('.tool-step.working summary')).to_contain_text('Updating 2 integration files',timeout=8000)
+ expect(frame.locator('.tool-step.working')).not_to_have_attribute('open','')
+ # Opening the history disclosure must leave nested diagnostics closed, including after refresh.
+ history=frame.locator('.previous-steps');history.locator(':scope > summary').click()
+ expect(history).to_have_attribute('open','')
+ expect(history.locator('.tool-step[open]')).to_have_count(0)
+ frame.locator('.tool-step.working > summary').click()
+ expect(frame.locator('.tool-step.working')).to_have_attribute('open','')
+ page.wait_for_timeout(1600)
+ expect(history.locator('.tool-step[open]')).to_have_count(0)
+ statuses=frame.locator('.step-status').evaluate_all('(els)=>els.map(el=>el.getBoundingClientRect().right)')
+ assert max(statuses)-min(statuses)<1,statuses
+ assert frame.locator('.tool-step > summary > svg.disclosure-icon').count()==2
+ page.screenshot(path=str(PREVIEWS/'agent-actions.png'));mode['actions']=False
+ mode['discovery']=True;expect(frame.locator('.discovery-card')).to_be_visible(timeout=8000)
+ expect(frame.get_by_role('link',name='Philips Hue',exact=True)).to_have_attribute('href','https://www.home-assistant.io/integrations/hue/')
+ page.screenshot(path=str(PREVIEWS/'existing-integration-choice.png'))
+ frame.get_by_role('button',name='Build my own anyway',exact=True).click()
+ expect(frame.locator('.discovery-card')).to_have_count(0);assert mode['chat']['build_custom_anyway'] is True
+ mode['retry']=True;expect(frame.get_by_role('button',name='Retry',exact=True)).to_be_visible(timeout=8000)
+ expect(frame.get_by_text('This request might be too big to handle all at once. Retry reconnects to the same session; you can also send a smaller follow-up.',exact=True)).to_be_visible()
+ page.screenshot(path=str(PREVIEWS/'retry-stream.png'))
+ frame.get_by_role('button',name='Retry',exact=True).click();expect(frame.locator('.retry-stream')).to_have_count(0);assert mode['retried']
  page.screenshot(path=str(PREVIEWS/'chat-modal.png'))
  mode['long']=True;expect(frame.locator('#chat p')).to_have_count(80,timeout=8000)
  frame.locator('#chat').evaluate('(el)=>el.scrollTop=0');mode['tail']=True
@@ -98,7 +126,7 @@ with sync_playwright() as p:
  assert download.value.suggested_filename=='parcel_tracker.zip'
  # A native rerender must not duplicate controls or remove Add entry/device.
  page.evaluate("document.querySelector('home-assistant').render()")
- expect(page.locator('ci-integration-actions')).to_have_count(1);expect(page.locator('#add-entry')).to_be_visible()
+ expect(page.locator('ci-integration-actions')).to_have_count(1,timeout=500);expect(page.locator('#add-entry')).to_be_visible()
  page.screenshot(path=str(PREVIEWS/'integration-detail.png'))
  page.get_by_role('button',name='More integration actions').click()
  page.on('dialog',lambda dialog:dialog.accept());page.get_by_role('menuitem',name='Uninstall',exact=True).click()

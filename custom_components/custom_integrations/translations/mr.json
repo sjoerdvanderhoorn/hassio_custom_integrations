@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "AI एजंटच्या मदतीने सानुकूल इंटिग्रेशन तयार करा आणि सांभाळा. OpenAI Platform API की कॉन्फिगर करा. मंजुरीनंतर तयार केलेला कोड Home Assistant च्या परवानग्यांसह चालू शकतो.",
+        "data": {
+          "openai_api_key": "OpenAI API की",
+          "model": "मॉडेल",
+          "auto_deploy": "कोड तैनातीला आपोआप मंजुरी द्या",
+          "auto_restart": "Core पुन्हा सुरू करण्यास आपोआप मंजुरी द्या"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "OpenAI API की प्रविष्ट करा.",
+      "missing_model": "मॉडेलचे नाव प्रविष्ट करा."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations आधीच कॉन्फिगर केले आहे."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations पर्याय",
+        "description": "सध्याची की ठेवण्यासाठी API की रिकामी ठेवा. उपकरण चाचण्या आणि विस्थापनासाठी नेहमी स्पष्ट मंजुरी आवश्यक असते.",
+        "data": {
+          "openai_api_key": "बदली OpenAI API की",
+          "model": "मॉडेल",
+          "auto_deploy": "कोड तैनातीला आपोआप मंजुरी द्या",
+          "auto_restart": "Core पुन्हा सुरू करण्यास आपोआप मंजुरी द्या"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "मॉडेलचे नाव प्रविष्ट करा."
+    }
+  }
+}

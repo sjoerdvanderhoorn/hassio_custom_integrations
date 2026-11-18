@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "أنشئ تكاملات مخصصة وحافظ عليها بمساعدة وكيل ذكاء اصطناعي. اضبط مفتاح API لمنصة OpenAI. يمكن تشغيل الكود المُنشأ بصلاحيات Home Assistant بعد الموافقة.",
+        "data": {
+          "openai_api_key": "مفتاح OpenAI API",
+          "model": "النموذج",
+          "auto_deploy": "الموافقة تلقائيًا على نشر الكود",
+          "auto_restart": "الموافقة تلقائيًا على إعادة تشغيل Core"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "أدخل مفتاح OpenAI API.",
+      "missing_model": "أدخل اسم النموذج."
+    },
+    "abort": {
+      "already_configured": "تم إعداد Custom Integrations بالفعل."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "خيارات Custom Integrations",
+        "description": "اترك مفتاح API فارغًا للاحتفاظ بالمفتاح الحالي. تتطلب اختبارات الأجهزة وإلغاء التثبيت دائمًا موافقة صريحة.",
+        "data": {
+          "openai_api_key": "مفتاح OpenAI API البديل",
+          "model": "النموذج",
+          "auto_deploy": "الموافقة تلقائيًا على نشر الكود",
+          "auto_restart": "الموافقة تلقائيًا على إعادة تشغيل Core"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "أدخل اسم النموذج."
+    }
+  }
+}

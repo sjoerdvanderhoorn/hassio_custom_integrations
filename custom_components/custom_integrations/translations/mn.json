@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "AI агентаар тусгай интеграц үүсгэж, арчилна уу. OpenAI Platform API түлхүүрийг тохируулна уу. Үүсгэсэн код зөвшөөрөл авсны дараа Home Assistant-ийн эрхээр ажиллаж болно.",
+        "data": {
+          "openai_api_key": "OpenAI API түлхүүр",
+          "model": "Загвар",
+          "auto_deploy": "Код байршуулалтыг автоматаар зөвшөөрөх",
+          "auto_restart": "Core-г дахин эхлүүлэхийг автоматаар зөвшөөрөх"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "OpenAI API түлхүүр оруулна уу.",
+      "missing_model": "Загварын нэр оруулна уу."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations аль хэдийн тохируулагдсан."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations тохиргоо",
+        "description": "Одоогийн түлхүүрийг хадгалахын тулд API түлхүүрийг хоосон үлдээнэ үү. Төхөөрөмжийн туршилт болон устгалд үргэлж тодорхой зөвшөөрөл шаардлагатай.",
+        "data": {
+          "openai_api_key": "Солих OpenAI API түлхүүр",
+          "model": "Загвар",
+          "auto_deploy": "Код байршуулалтыг автоматаар зөвшөөрөх",
+          "auto_restart": "Core-г дахин эхлүүлэхийг автоматаар зөвшөөрөх"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Загварын нэр оруулна уу."
+    }
+  }
+}

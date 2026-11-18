@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Kurkite ir prižiūrėkite pasirinktines integracijas naudodami DI agentą. Nustatykite OpenAI Platform API raktą. Patvirtintas sugeneruotas kodas gali veikti su Home Assistant leidimais.",
+        "data": {
+          "openai_api_key": "OpenAI API raktas",
+          "model": "Modelis",
+          "auto_deploy": "Automatiškai patvirtinti kodo diegimą",
+          "auto_restart": "Automatiškai patvirtinti Core paleidimą iš naujo"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Įveskite OpenAI API raktą.",
+      "missing_model": "Įveskite modelio pavadinimą."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations jau sukonfigūruota."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations parinktys",
+        "description": "Jei norite išsaugoti esamą raktą, API rakto lauką palikite tuščią. Įrenginių bandymams ir pašalinimui visada reikia aiškaus patvirtinimo.",
+        "data": {
+          "openai_api_key": "Pakaitinis OpenAI API raktas",
+          "model": "Modelis",
+          "auto_deploy": "Automatiškai patvirtinti kodo diegimą",
+          "auto_restart": "Automatiškai patvirtinti Core paleidimą iš naujo"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Įveskite modelio pavadinimą."
+    }
+  }
+}

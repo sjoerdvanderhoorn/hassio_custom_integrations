@@ -38,6 +38,7 @@ class MessageRequest(BaseModel):
     conversation_id: str | None = None
     message: str = Field(min_length=1, max_length=12000)
     domain: str | None = None
+    build_custom_anyway: bool = False
     submission_id: str = Field(default_factory=lambda: __import__('uuid').uuid4().hex, min_length=1, max_length=100)
 
 
@@ -292,6 +293,10 @@ def create_app(data_dir: Path | None = None, ha_dir: Path | None = None, options
     @app.post("/api/chat")
     def chat(body: MessageRequest):
         with active_lock:
+            if body.build_custom_anyway:
+                if not body.conversation_id:raise HTTPException(400,'Choose an existing conversation first')
+                try:store.confirm_custom_build(body.conversation_id)
+                except ValueError as exc:raise HTTPException(400,str(exc)) from exc
             # A lost HTTP response must not turn a retry into a second agent turn.
             conversations=([store.get_conversation(body.conversation_id)] if body.conversation_id else
                            [store.get_conversation(item['id']) for item in store.list_conversations()])
@@ -345,6 +350,18 @@ def create_app(data_dir: Path | None = None, ha_dir: Path | None = None, options
         if data is None:
             raise HTTPException(404, "Job not found")
         return data
+
+    @app.post('/api/jobs/{job_id}/retry')
+    def retry_job(job_id: str):
+        with active_lock:
+            item=jobs.get(job_id)
+            if not item or item['status']!='failed' or not item.get('retryable'):raise HTTPException(409,'This task is not waiting for stream recovery')
+            if active['job'] and jobs.get(active['job'])['status'] in {'working','approval_required','stopping','stop_unconfirmed'}:raise HTTPException(409,'Another agent task is active')
+            if job_id not in store.records('recoveries'):raise HTTPException(409,'No saved stream context exists')
+            jobs.fields(job_id,retryable=False,stop_requested=False,can_steer=False)
+            jobs.status(job_id,'working');active['job']=job_id
+            threading.Thread(target=agent.run,args=(item['conversation_id'],'',job_id),kwargs={'resume':True},daemon=True).start()
+        return {'conversation_id':item['conversation_id'],'job_id':job_id}
 
     @app.post("/api/jobs/{job_id}/approve")
     def approval(job_id: str, body: ApprovalRequest):

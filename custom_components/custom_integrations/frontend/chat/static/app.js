@@ -249,12 +249,19 @@
 
   }
 
+  function disclosureIcon() {
+    const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('aria-hidden','true');svg.classList.add('disclosure-icon');
+    const path=document.createElementNS(svg.namespaceURI,'path');path.setAttribute('d','m9 5 7 7-7 7');svg.append(path);return svg;
+  }
+
   function toolStep(step) {
 
-    const details=node('details','tool-step '+step.status);const summary=node('summary');
+    const details=node('details','tool-step '+step.status);details.dataset.expandKey='step:'+step.id;const summary=node('summary');summary.title='Show action details';
 
-    summary.append(node('span','step-indicator',step.status==='working'?'◌':step.status==='done'?'✓':step.status==='failed'?'!':'○'),node('span','',step.label),node('span','step-status',t(step.status)));
+    summary.append(node('span','step-indicator',step.status==='working'?'◌':step.status==='done'?'✓':step.status==='failed'?'!':'○'),node('span','step-label',step.label),node('span','step-status',t(step.status)));
 
+    summary.append(disclosureIcon());
     details.append(summary,node('pre','diagnostics',JSON.stringify({tool:step.tool,started:step.started,finished:step.finished,arguments:step.arguments,result:step.result},null,2)));
 
     return details;
@@ -263,7 +270,7 @@
 
   function progress(job) {
 
-    if(!(job.steps || []).length && job.status==='done' && !(job.events || []).some(event=>['error','approval'].includes(event.kind)))return;
+    if(!(job.steps || []).length && job.status==='done' && !(job.events || []).some(event=>['error','approval','retry'].includes(event.kind)))return;
 
     const group=node('section','progress-group');group.dataset.job=job.id;
 
@@ -273,21 +280,23 @@
 
       const current=steps.find(step=>step.status==='working') || steps[steps.length-1];
 
-      group.append(toolStep(current));
+
 
       const earlier=steps.filter(step=>step.id!==current.id);
 
       if(earlier.length) {
 
-        const history=node('details','previous-steps');history.dataset.history=job.id;
+        const history=node('details','previous-steps');history.dataset.history=job.id;history.dataset.expandKey='history:'+job.id+':'+(steps[0].after_message ?? job.after_message);
 
-        history.append(node('summary','',`${earlier.length} ${t('previous')}`));
+        const toggle=node('summary','');toggle.append(disclosureIcon(),node('span','',`${earlier.length} ${t('previous')}`));history.append(toggle);
 
         earlier.forEach(step=>history.append(toolStep(step)));group.append(history);
 
       }
 
     }
+
+    if(steps.length)group.append(toolStep(steps.find(step=>step.status==='working') || steps[steps.length-1]));
 
     if(job.status==='interrupted')group.append(node('p','status-note',t('interruptedHelp')));
 
@@ -299,8 +308,13 @@
 
     } else if(!['done','failed','interrupted'].includes(job.status))group.append(node('p','status-note',t(job.status)));
 
-    for(const event of job.events || [])if(['error','approval'].includes(event.kind))group.append(node('p',event.kind==='error'?'error':'hint',event.message));
+    for(const event of job.events || [])if(['error','approval','retry'].includes(event.kind))group.append(node('p',event.kind==='error'?'error':'hint',event.message));
 
+    if(job.retryable && job.status==='failed'){
+      const retry=node('button','primary-button retry-stream','Retry');retry.type='button';
+      retry.onclick=async()=>{retry.disabled=true;try{const result=await request(`api/jobs/${job.id}/retry`,{});state.activeJob=result.job_id;await refresh();}catch(error){$('connection-error').textContent=error.message;retry.disabled=false;}};
+      group.append(node('p','hint','This request might be too big to handle all at once. Retry reconnects to the same session; you can also send a smaller follow-up.'),retry);
+    }
     $('chat').append(group);
 
   }
@@ -320,7 +334,7 @@
 
     if(key===state.chatKey)return;
 
-    const expanded=[...$('chat').querySelectorAll('details[open]')].map(el=>el.dataset.history ? 'history:'+el.dataset.history : el.querySelector('summary')?.textContent);
+    const expanded=[...$('chat').querySelectorAll('details[open]')].map(el=>el.dataset.expandKey).filter(Boolean);
 
     const newMessage=conv.messages.length!==state.messageCount;state.messageCount=conv.messages.length;
 
@@ -337,10 +351,21 @@
     for(let i=0;i<conv.messages.length;i++) {
 
       const msg=conv.messages[i];message(msg.role,msg.content,msg.rendered_content);
+      if(msg.integration_discovery){
+        const card=node('section','discovery-card');card.append(node('strong','','Existing integration options'),node('p','hint',msg.integration_discovery.summary));
+        for(const match of msg.integration_discovery.matches){
+          const link=node('a','',match.name);try{const url=new URL(match.url);if(url.protocol==='https:' && !url.username && !url.password){link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';}}catch(_){}
+          card.append(link,node('p','',match.reason));
+          if(match.setup_available){const setup=node('a','existing-setup','Set up '+match.name);setup.href='/config/integrations/add?domain='+encodeURIComponent(match.domain);setup.target='_top';card.append(setup);}else card.append(node('p','hint','Follow its documentation to install it before starting Home Assistant setup.'));
+        }
+        const own=node('button','secondary-button','Build my own anyway');own.type='button';own.onclick=async()=>{
+          own.disabled=true;try{const result=await request('api/chat',{conversation_id:conv.id,message:'I understand an existing integration is available. Build my own integration anyway.',build_custom_anyway:true,submission_id:crypto.randomUUID()});state.conversation=result.conversation_id;state.activeJob=result.job_id;await refresh();}catch(error){$('connection-error').textContent=error.message;own.disabled=false;}
+        };card.append(own);$('chat').append(card);
+      }
 
       for(const job of jobs) {
 
-        const steers=conv.messages.map((msg,index)=>msg.job_id===job.id?index+1:0);
+        const steers=conv.messages.map((msg,index)=>(msg.job_id===job.id || msg.agent_job_id===job.id)?index+1:0);
 
         const currentAnchor=Math.max(job.after_message,...steers);
 
@@ -356,7 +381,7 @@
 
     for(const job of jobs.filter(job=>!job.after_message || job.after_message>conv.messages.length))progress(job);
 
-    for(const el of $('chat').querySelectorAll('details'))if(expanded.includes(el.dataset.history?'history:'+el.dataset.history:el.querySelector('summary')?.textContent))el.open=true;
+    for(const el of $('chat').querySelectorAll('details'))if(expanded.includes(el.dataset.expandKey))el.open=true;
 
     const related=(conv.domains || []).filter(domain=>state.integrations.some(item=>item.domain===domain));
 
@@ -710,7 +735,7 @@
 
   $('message').addEventListener('input',()=>{resizeComposer();updateComposer();});
 
-  $('message').addEventListener('keydown',event=>{if(event.key==='Enter' && !event.isComposing && (event.ctrlKey || event.shiftKey)){event.preventDefault();if(!$('send').disabled)$('composer').requestSubmit();}});
+  $('message').addEventListener('keydown',event=>{if(event.key!=='Enter' || event.isComposing)return;if(event.ctrlKey || event.shiftKey){event.preventDefault();const input=$('message');input.setRangeText('\n',input.selectionStart,input.selectionEnd,'end');input.dispatchEvent(new Event('input',{bubbles:true}));}else if(!event.altKey && !event.metaKey){event.preventDefault();if(!$('send').disabled)$('composer').requestSubmit();}});
 
   if(window.ResizeObserver)new ResizeObserver(resizeComposer).observe($('composer'));
 

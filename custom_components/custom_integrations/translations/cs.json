@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Vytvářejte a spravujte vlastní integrace pomocí AI agenta. Nastavte klíč API platformy OpenAI. Vygenerovaný kód může po schválení běžet s oprávněními Home Assistant.",
+        "data": {
+          "openai_api_key": "Klíč API OpenAI",
+          "model": "Model",
+          "auto_deploy": "Automaticky schvalovat nasazení kódu",
+          "auto_restart": "Automaticky schvalovat restartování Core"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Zadejte klíč API OpenAI.",
+      "missing_model": "Zadejte název modelu."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations je již nakonfigurováno."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Možnosti Custom Integrations",
+        "description": "Pro zachování aktuálního klíče ponechte klíč API prázdný. Testy zařízení a odinstalace vždy vyžadují výslovné schválení.",
+        "data": {
+          "openai_api_key": "Náhradní klíč API OpenAI",
+          "model": "Model",
+          "auto_deploy": "Automaticky schvalovat nasazení kódu",
+          "auto_restart": "Automaticky schvalovat restartování Core"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Zadejte název modelu."
+    }
+  }
+}

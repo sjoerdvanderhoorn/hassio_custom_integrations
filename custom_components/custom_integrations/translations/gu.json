@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "AI એજન્ટ સાથે કસ્ટમ ઇન્ટિગ્રેશન બનાવો અને જાળવો. OpenAI Platform API કી ગોઠવો. મંજૂરી પછી બનાવેલો કોડ Home Assistantની પરવાનગીઓ સાથે ચાલી શકે છે.",
+        "data": {
+          "openai_api_key": "OpenAI API કી",
+          "model": "મોડેલ",
+          "auto_deploy": "કોડ ડિપ્લોયમેન્ટને આપમેળે મંજૂરી આપો",
+          "auto_restart": "Core પુનઃપ્રારંભને આપમેળે મંજૂરી આપો"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "OpenAI API કી દાખલ કરો.",
+      "missing_model": "મોડેલનું નામ દાખલ કરો."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations પહેલેથી ગોઠવાયેલ છે."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations વિકલ્પો",
+        "description": "હાલની કી રાખવા API કી ખાલી રાખો. ઉપકરણ પરીક્ષણ અને અનઇન્સ્ટોલ માટે હંમેશાં સ્પષ્ટ મંજૂરી જરૂરી છે.",
+        "data": {
+          "openai_api_key": "બદલવાની OpenAI API કી",
+          "model": "મોડેલ",
+          "auto_deploy": "કોડ ડિપ્લોયમેન્ટને આપમેળે મંજૂરી આપો",
+          "auto_restart": "Core પુનઃપ્રારંભને આપમેળે મંજૂરી આપો"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "મોડેલનું નામ દાખલ કરો."
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Opprett og vedlikehold egendefinerte integrasjoner med en KI-agent. Konfigurer en OpenAI Platform API-nøkkel. Generert kode kan etter godkjenning kjøre med Home Assistants tillatelser.",
+        "data": {
+          "openai_api_key": "OpenAI API-nøkkel",
+          "model": "Modell",
+          "auto_deploy": "Godkjenn utrulling av kode automatisk",
+          "auto_restart": "Godkjenn omstart av Core automatisk"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Skriv inn en OpenAI API-nøkkel.",
+      "missing_model": "Skriv inn et modellnavn."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations er allerede konfigurert."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Alternativer for Custom Integrations",
+        "description": "La API-nøkkelen stå tom for å beholde den nåværende nøkkelen. Enhetstester og avinstallering krever alltid uttrykkelig godkjenning.",
+        "data": {
+          "openai_api_key": "Ny OpenAI API-nøkkel",
+          "model": "Modell",
+          "auto_deploy": "Godkjenn utrulling av kode automatisk",
+          "auto_restart": "Godkjenn omstart av Core automatisk"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Skriv inn et modellnavn."
+    }
+  }
+}

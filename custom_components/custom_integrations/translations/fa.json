@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "با یک عامل هوش مصنوعی یکپارچه‌سازی‌های سفارشی بسازید و نگهداری کنید. کلید API پلتفرم OpenAI را تنظیم کنید. کد تولیدشده پس از تأیید می‌تواند با مجوزهای Home Assistant اجرا شود.",
+        "data": {
+          "openai_api_key": "کلید API ‏OpenAI",
+          "model": "مدل",
+          "auto_deploy": "تأیید خودکار استقرار کد",
+          "auto_restart": "تأیید خودکار راه‌اندازی مجدد Core"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "یک کلید API ‏OpenAI وارد کنید.",
+      "missing_model": "نام مدل را وارد کنید."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations قبلاً پیکربندی شده است."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "گزینه‌های Custom Integrations",
+        "description": "برای حفظ کلید فعلی، کلید API را خالی بگذارید. آزمایش دستگاه‌ها و حذف نصب همیشه به تأیید صریح نیاز دارند.",
+        "data": {
+          "openai_api_key": "کلید API جایگزین OpenAI",
+          "model": "مدل",
+          "auto_deploy": "تأیید خودکار استقرار کد",
+          "auto_restart": "تأیید خودکار راه‌اندازی مجدد Core"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "نام مدل را وارد کنید."
+    }
+  }
+}

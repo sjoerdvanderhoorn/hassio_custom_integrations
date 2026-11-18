@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Cruthaigh agus cothabháil comhtháthuithe saincheaptha le gníomhaire IS. Cumraigh eochair API OpenAI Platform. Is féidir cód ginte a rith le ceadanna Home Assistant tar éis ceadú.",
+        "data": {
+          "openai_api_key": "Eochair API OpenAI",
+          "model": "Múnla",
+          "auto_deploy": "Ceadaigh imscaradh cóid go huathoibríoch",
+          "auto_restart": "Ceadaigh atosuithe Core go huathoibríoch"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Cuir isteach eochair API OpenAI.",
+      "missing_model": "Cuir isteach ainm múnla."
+    },
+    "abort": {
+      "already_configured": "Tá Custom Integrations cumraithe cheana féin."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Roghanna Custom Integrations",
+        "description": "Fág an eochair API folamh chun an eochair reatha a choinneáil. Teastaíonn ceadú sainráite i gcónaí le haghaidh tástálacha gléis agus díshuiteála.",
+        "data": {
+          "openai_api_key": "Eochair API OpenAI ionaid",
+          "model": "Múnla",
+          "auto_deploy": "Ceadaigh imscaradh cóid go huathoibríoch",
+          "auto_restart": "Ceadaigh atosuithe Core go huathoibríoch"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Cuir isteach ainm múnla."
+    }
+  }
+}

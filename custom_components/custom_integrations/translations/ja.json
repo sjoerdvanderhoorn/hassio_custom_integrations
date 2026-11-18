@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "AI エージェントでカスタム統合を作成・保守します。OpenAI Platform の API キーを設定してください。生成されたコードは、承認後に Home Assistant の権限で実行できます。",
+        "data": {
+          "openai_api_key": "OpenAI API キー",
+          "model": "モデル",
+          "auto_deploy": "コードのデプロイを自動承認する",
+          "auto_restart": "Core の再起動を自動承認する"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "OpenAI API キーを入力してください。",
+      "missing_model": "モデル名を入力してください。"
+    },
+    "abort": {
+      "already_configured": "Custom Integrations はすでに設定されています。"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations のオプション",
+        "description": "現在のキーを保持するには API キーを空欄にしてください。デバイスのテストとアンインストールには、常に明示的な承認が必要です。",
+        "data": {
+          "openai_api_key": "新しい OpenAI API キー",
+          "model": "モデル",
+          "auto_deploy": "コードのデプロイを自動承認する",
+          "auto_restart": "Core の再起動を自動承認する"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "モデル名を入力してください。"
+    }
+  }
+}

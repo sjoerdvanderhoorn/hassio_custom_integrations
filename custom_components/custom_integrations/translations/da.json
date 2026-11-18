@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Opret og vedligehold tilpassede integrationer med en AI-agent. Konfigurer en OpenAI Platform API-nøgle. Genereret kode kan efter godkendelse køre med Home Assistants rettigheder.",
+        "data": {
+          "openai_api_key": "OpenAI API-nøgle",
+          "model": "Model",
+          "auto_deploy": "Godkend automatisk udrulning af kode",
+          "auto_restart": "Godkend automatisk genstart af Core"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Indtast en OpenAI API-nøgle.",
+      "missing_model": "Indtast et modelnavn."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations er allerede konfigureret."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Indstillinger for Custom Integrations",
+        "description": "Lad API-nøglen være tom for at beholde den nuværende nøgle. Enhedstest og afinstallation kræver altid udtrykkelig godkendelse.",
+        "data": {
+          "openai_api_key": "Ny OpenAI API-nøgle",
+          "model": "Model",
+          "auto_deploy": "Godkend automatisk udrulning af kode",
+          "auto_restart": "Godkend automatisk genstart af Core"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Indtast et modelnavn."
+    }
+  }
+}

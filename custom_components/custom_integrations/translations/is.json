@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Búðu til og viðhaltu sérsniðnum samþættingum með gervigreindaraðstoð. Stilltu API-lykil fyrir OpenAI Platform. Eftir samþykki getur myndaður kóði keyrt með heimildum Home Assistant.",
+        "data": {
+          "openai_api_key": "OpenAI API-lykill",
+          "model": "Líkan",
+          "auto_deploy": "Samþykkja sjálfkrafa uppsetningu kóða",
+          "auto_restart": "Samþykkja sjálfkrafa endurræsingar Core"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Sláðu inn OpenAI API-lykil.",
+      "missing_model": "Sláðu inn heiti líkans."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations er þegar uppsett."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Valkostir Custom Integrations",
+        "description": "Skildu API-lykilinn eftir auðan til að halda núverandi lykli. Prófanir á tækjum og fjarlæging krefjast alltaf skýrs samþykkis.",
+        "data": {
+          "openai_api_key": "Nýr OpenAI API-lykill",
+          "model": "Líkan",
+          "auto_deploy": "Samþykkja sjálfkrafa uppsetningu kóða",
+          "auto_restart": "Samþykkja sjálfkrafa endurræsingar Core"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Sláðu inn heiti líkans."
+    }
+  }
+}

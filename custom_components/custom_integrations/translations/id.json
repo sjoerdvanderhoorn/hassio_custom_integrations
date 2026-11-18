@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Buat dan kelola integrasi kustom dengan agen AI. Konfigurasikan kunci API OpenAI Platform. Kode yang dihasilkan dapat berjalan dengan izin Home Assistant setelah disetujui.",
+        "data": {
+          "openai_api_key": "Kunci API OpenAI",
+          "model": "Model",
+          "auto_deploy": "Setujui penerapan kode secara otomatis",
+          "auto_restart": "Setujui mulai ulang Core secara otomatis"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Masukkan kunci API OpenAI.",
+      "missing_model": "Masukkan nama model."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations sudah dikonfigurasi."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opsi Custom Integrations",
+        "description": "Biarkan kunci API kosong untuk mempertahankan kunci saat ini. Pengujian perangkat dan penghapusan instalasi selalu memerlukan persetujuan eksplisit.",
+        "data": {
+          "openai_api_key": "Kunci API OpenAI pengganti",
+          "model": "Model",
+          "auto_deploy": "Setujui penerapan kode secara otomatis",
+          "auto_restart": "Setujui mulai ulang Core secara otomatis"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Masukkan nama model."
+    }
+  }
+}

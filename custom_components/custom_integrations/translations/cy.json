@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Creu a chynnal integreiddiadau personol gydag asiant AI. Ffurfweddwch allwedd API OpenAI Platform. Gall cod a gynhyrchir redeg gyda chaniatâd Home Assistant ar ôl ei gymeradwyo.",
+        "data": {
+          "openai_api_key": "Allwedd API OpenAI",
+          "model": "Model",
+          "auto_deploy": "Cymeradwyo defnyddio cod yn awtomatig",
+          "auto_restart": "Cymeradwyo ailgychwyn Core yn awtomatig"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Rhowch allwedd API OpenAI.",
+      "missing_model": "Rhowch enw model."
+    },
+    "abort": {
+      "already_configured": "Mae Custom Integrations eisoes wedi'i ffurfweddu."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opsiynau Custom Integrations",
+        "description": "Gadewch yr allwedd API yn wag i gadw'r allwedd bresennol. Mae profion dyfeisiau a dadosod bob amser yn gofyn am gymeradwyaeth benodol.",
+        "data": {
+          "openai_api_key": "Allwedd API OpenAI newydd",
+          "model": "Model",
+          "auto_deploy": "Cymeradwyo defnyddio cod yn awtomatig",
+          "auto_restart": "Cymeradwyo ailgychwyn Core yn awtomatig"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Rhowch enw model."
+    }
+  }
+}

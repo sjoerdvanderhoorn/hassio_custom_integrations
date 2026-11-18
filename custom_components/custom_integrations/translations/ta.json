@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "AI முகவர் மூலம் தனிப்பயன் ஒருங்கிணைப்புகளை உருவாக்கிப் பராமரிக்கவும். OpenAI Platform API விசையை அமைக்கவும். அனுமதிக்குப் பிறகு உருவாக்கப்பட்ட குறியீடு Home Assistant அனுமதிகளுடன் இயங்கலாம்.",
+        "data": {
+          "openai_api_key": "OpenAI API விசை",
+          "model": "மாதிரி",
+          "auto_deploy": "குறியீட்டு நிறுவலைத் தானாக அனுமதிக்கவும்",
+          "auto_restart": "Core மறுதொடக்கங்களைத் தானாக அனுமதிக்கவும்"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "OpenAI API விசையை உள்ளிடவும்.",
+      "missing_model": "மாதிரியின் பெயரை உள்ளிடவும்."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations ஏற்கனவே அமைக்கப்பட்டுள்ளது."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations விருப்பங்கள்",
+        "description": "தற்போதைய விசையை வைத்திருக்க API விசையை காலியாக விடவும். சாதனச் சோதனைகளுக்கும் நிறுவல் நீக்கத்திற்கும் எப்போதும் வெளிப்படையான அனுமதி தேவை.",
+        "data": {
+          "openai_api_key": "மாற்று OpenAI API விசை",
+          "model": "மாதிரி",
+          "auto_deploy": "குறியீட்டு நிறுவலைத் தானாக அனுமதிக்கவும்",
+          "auto_restart": "Core மறுதொடக்கங்களைத் தானாக அனுமதிக்கவும்"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "மாதிரியின் பெயரை உள்ளிடவும்."
+    }
+  }
+}

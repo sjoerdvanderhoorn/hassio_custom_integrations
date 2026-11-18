@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Skep en onderhou pasgemaakte integrasies met ’n KI-agent. Stel ’n OpenAI Platform API-sleutel op. Gegenereerde kode kan ná goedkeuring met Home Assistant se regte loop.",
+        "data": {
+          "openai_api_key": "OpenAI API-sleutel",
+          "model": "Model",
+          "auto_deploy": "Keur kode-ontplooiing outomaties goed",
+          "auto_restart": "Keur Core-herbeginne outomaties goed"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Voer ’n OpenAI API-sleutel in.",
+      "missing_model": "Voer ’n modelnaam in."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations is reeds opgestel."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations-opsies",
+        "description": "Laat die API-sleutel leeg om die huidige sleutel te behou. Toesteltoetse en verwydering vereis altyd uitdruklike goedkeuring.",
+        "data": {
+          "openai_api_key": "Vervangende OpenAI API-sleutel",
+          "model": "Model",
+          "auto_deploy": "Keur kode-ontplooiing outomaties goed",
+          "auto_restart": "Keur Core-herbeginne outomaties goed"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Voer ’n modelnaam in."
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "შექმენით და მართეთ მორგებული ინტეგრაციები AI აგენტით. დააყენეთ OpenAI Platform-ის API გასაღები. დადასტურების შემდეგ გენერირებულ კოდს შეუძლია Home Assistant-ის უფლებებით მუშაობა.",
+        "data": {
+          "openai_api_key": "OpenAI API გასაღები",
+          "model": "მოდელი",
+          "auto_deploy": "კოდის განთავსების ავტომატური დამტკიცება",
+          "auto_restart": "Core-ის გადატვირთვის ავტომატური დამტკიცება"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "შეიყვანეთ OpenAI API გასაღები.",
+      "missing_model": "შეიყვანეთ მოდელის სახელი."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations უკვე გამართულია."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations-ის პარამეტრები",
+        "description": "მიმდინარე გასაღების შესანარჩუნებლად API გასაღები ცარიელი დატოვეთ. მოწყობილობების ტესტირება და წაშლა ყოველთვის მოითხოვს აშკარა თანხმობას.",
+        "data": {
+          "openai_api_key": "შემცვლელი OpenAI API გასაღები",
+          "model": "მოდელი",
+          "auto_deploy": "კოდის განთავსების ავტომატური დამტკიცება",
+          "auto_restart": "Core-ის გადატვირთვის ავტომატური დამტკიცება"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "შეიყვანეთ მოდელის სახელი."
+    }
+  }
+}

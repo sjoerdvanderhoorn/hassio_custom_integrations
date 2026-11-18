@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Ստեղծեք և սպասարկեք անհատական ինտեգրումներ AI գործակալի միջոցով։ Կարգավորեք OpenAI Platform-ի API բանալի։ Հաստատումից հետո ստեղծված կոդը կարող է գործարկվել Home Assistant-ի թույլտվություններով։",
+        "data": {
+          "openai_api_key": "OpenAI API բանալի",
+          "model": "Մոդել",
+          "auto_deploy": "Ավտոմատ հաստատել կոդի տեղակայումը",
+          "auto_restart": "Ավտոմատ հաստատել Core-ի վերագործարկումները"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Մուտքագրեք OpenAI API բանալի։",
+      "missing_model": "Մուտքագրեք մոդելի անունը։"
+    },
+    "abort": {
+      "already_configured": "Custom Integrations-ն արդեն կարգավորված է։"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations-ի ընտրանքներ",
+        "description": "Ընթացիկ բանալին պահպանելու համար API բանալին թողեք դատարկ։ Սարքերի փորձարկումը և ապատեղադրումը միշտ պահանջում են բացահայտ հաստատում։",
+        "data": {
+          "openai_api_key": "Փոխարինող OpenAI API բանալի",
+          "model": "Մոդել",
+          "auto_deploy": "Ավտոմատ հաստատել կոդի տեղակայումը",
+          "auto_restart": "Ավտոմատ հաստատել Core-ի վերագործարկումները"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Մուտքագրեք մոդելի անունը։"
+    }
+  }
+}

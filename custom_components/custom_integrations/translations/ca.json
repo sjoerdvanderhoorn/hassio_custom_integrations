@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Creeu i manteniu integracions personalitzades amb un agent d'IA. Configureu una clau API d'OpenAI Platform. El codi generat es pot executar amb els permisos de Home Assistant després de l'aprovació.",
+        "data": {
+          "openai_api_key": "Clau API d'OpenAI",
+          "model": "Model",
+          "auto_deploy": "Aprova automàticament el desplegament del codi",
+          "auto_restart": "Aprova automàticament els reinicis del Core"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Introduïu una clau API d'OpenAI.",
+      "missing_model": "Introduïu un nom de model."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations ja està configurat."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opcions de Custom Integrations",
+        "description": "Deixeu la clau API en blanc per conservar l'actual. Les proves de dispositius i la desinstal·lació sempre requereixen aprovació explícita.",
+        "data": {
+          "openai_api_key": "Clau API d'OpenAI de substitució",
+          "model": "Model",
+          "auto_deploy": "Aprova automàticament el desplegament del codi",
+          "auto_restart": "Aprova automàticament els reinicis del Core"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Introduïu un nom de model."
+    }
+  }
+}

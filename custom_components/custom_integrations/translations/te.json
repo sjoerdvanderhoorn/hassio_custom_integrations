@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "AI ఏజెంట్‌తో కస్టమ్ ఇంటిగ్రేషన్‌లను సృష్టించి నిర్వహించండి. OpenAI Platform API కీని కాన్ఫిగర్ చేయండి. ఆమోదం తర్వాత రూపొందించిన కోడ్ Home Assistant అనుమతులతో అమలు కావచ్చు.",
+        "data": {
+          "openai_api_key": "OpenAI API కీ",
+          "model": "మోడల్",
+          "auto_deploy": "కోడ్ అమలును స్వయంచాలకంగా ఆమోదించు",
+          "auto_restart": "Core పునఃప్రారంభాలను స్వయంచాలకంగా ఆమోదించు"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "OpenAI API కీని నమోదు చేయండి.",
+      "missing_model": "మోడల్ పేరును నమోదు చేయండి."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations ఇప్పటికే కాన్ఫిగర్ చేయబడింది."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations ఎంపికలు",
+        "description": "ప్రస్తుత కీని ఉంచడానికి API కీని ఖాళీగా వదిలేయండి. పరికర పరీక్షలకు మరియు అన్‌ఇన్‌స్టాల్‌కు ఎల్లప్పుడూ స్పష్టమైన ఆమోదం అవసరం.",
+        "data": {
+          "openai_api_key": "భర్తీ OpenAI API కీ",
+          "model": "మోడల్",
+          "auto_deploy": "కోడ్ అమలును స్వయంచాలకంగా ఆమోదించు",
+          "auto_restart": "Core పునఃప్రారంభాలను స్వయంచాలకంగా ఆమోదించు"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "మోడల్ పేరును నమోదు చేయండి."
+    }
+  }
+}

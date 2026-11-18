@@ -83,6 +83,7 @@ def test_agent_requires_icon_for_new_install_and_can_generate_it(tmp_path):
     bridge=AgentBridge(store,manager,object(),jobs,{'auto_deploy':True})
     result=bridge.tool('deploy_integration',{'domain':'exchange_rate'},job)
     assert not result['ok'] and 'generate_integration_icon' in result['reason']
+    bridge.tool('report_integration_discovery',{'summary':'Researched available integrations for this test.','matches':[]},job)
     icon=bridge.tool('generate_integration_icon',{'domain':'exchange_rate','background':'#007FA3','shapes':SHAPES},job)
     assert icon['ok'] and manager.has_icon('exchange_rate')
     assert store.get_conversation(conv['id'])['domains']==['exchange_rate']

@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Erstelle und verwalte benutzerdefinierte Integrationen mit einem KI-Agenten. Konfiguriere einen API-Schlüssel für die OpenAI Platform. Generierter Code kann nach Genehmigung mit den Berechtigungen von Home Assistant ausgeführt werden.",
+        "data": {
+          "openai_api_key": "OpenAI-API-Schlüssel",
+          "model": "Modell",
+          "auto_deploy": "Bereitstellung von Code automatisch genehmigen",
+          "auto_restart": "Neustarts von Core automatisch genehmigen"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Gib einen OpenAI-API-Schlüssel ein.",
+      "missing_model": "Gib einen Modellnamen ein."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations ist bereits eingerichtet."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Optionen für Custom Integrations",
+        "description": "Lasse den API-Schlüssel leer, um den aktuellen Schlüssel beizubehalten. Gerätetests und Deinstallation erfordern immer eine ausdrückliche Genehmigung.",
+        "data": {
+          "openai_api_key": "Neuer OpenAI-API-Schlüssel",
+          "model": "Modell",
+          "auto_deploy": "Bereitstellung von Code automatisch genehmigen",
+          "auto_restart": "Neustarts von Core automatisch genehmigen"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Gib einen Modellnamen ein."
+    }
+  }
+}

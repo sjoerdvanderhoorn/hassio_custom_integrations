@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "צרו ותחזקו שילובים מותאמים אישית בעזרת סוכן בינה מלאכותית. הגדירו מפתח API של OpenAI Platform. לאחר אישור, הקוד שנוצר יכול לפעול עם ההרשאות של Home Assistant.",
+        "data": {
+          "openai_api_key": "מפתח API של OpenAI",
+          "model": "מודל",
+          "auto_deploy": "אישור אוטומטי של פריסת קוד",
+          "auto_restart": "אישור אוטומטי של הפעלות Core מחדש"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "יש להזין מפתח API של OpenAI.",
+      "missing_model": "יש להזין שם מודל."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations כבר הוגדר."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "אפשרויות Custom Integrations",
+        "description": "השאירו את מפתח ה־API ריק כדי לשמור על המפתח הנוכחי. בדיקות מכשירים והסרת התקנה תמיד דורשות אישור מפורש.",
+        "data": {
+          "openai_api_key": "מפתח API חלופי של OpenAI",
+          "model": "מודל",
+          "auto_deploy": "אישור אוטומטי של פריסת קוד",
+          "auto_restart": "אישור אוטומטי של הפעלות Core מחדש"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "יש להזין שם מודל."
+    }
+  }
+}

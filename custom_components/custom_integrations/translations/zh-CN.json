@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "使用 AI 代理创建和维护自定义集成。请配置 OpenAI Platform API 密钥。生成的代码经批准后可以使用 Home Assistant 的权限运行。",
+        "data": {
+          "openai_api_key": "OpenAI API 密钥",
+          "model": "模型",
+          "auto_deploy": "自动批准部署代码",
+          "auto_restart": "自动批准重启 Core"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "请输入 OpenAI API 密钥。",
+      "missing_model": "请输入模型名称。"
+    },
+    "abort": {
+      "already_configured": "Custom Integrations 已配置。"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations 选项",
+        "description": "将 API 密钥留空可保留当前密钥。设备测试和卸载始终需要明确批准。",
+        "data": {
+          "openai_api_key": "替换 OpenAI API 密钥",
+          "model": "模型",
+          "auto_deploy": "自动批准部署代码",
+          "auto_restart": "自动批准重启 Core"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "请输入模型名称。"
+    }
+  }
+}

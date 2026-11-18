@@ -4,6 +4,11 @@ import re
 from .ha import redact
 
 LABELS = {
+    'report_integration_discovery':'Checking existing integration options',
+    'read_integration_files':'Reading integration source files',
+    'list_revisions':'Reviewing code history',
+    'read_revision_files':'Reading a saved revision',
+    'restore_revision':'Restoring a code revision',
     'uninstall_integration': 'Uninstalling the integration',
     'list_integrations': 'Reviewing generated integrations',
     'write_files': 'Updating integration code',

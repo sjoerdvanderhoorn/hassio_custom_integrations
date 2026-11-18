@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Skapa och underhåll anpassade integrationer med en AI-agent. Konfigurera en OpenAI Platform API-nyckel. Genererad kod kan efter godkännande köras med Home Assistants behörigheter.",
+        "data": {
+          "openai_api_key": "OpenAI API-nyckel",
+          "model": "Modell",
+          "auto_deploy": "Godkänn automatiskt distribution av kod",
+          "auto_restart": "Godkänn automatiskt omstarter av Core"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Ange en OpenAI API-nyckel.",
+      "missing_model": "Ange ett modellnamn."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations är redan konfigurerat."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Alternativ för Custom Integrations",
+        "description": "Lämna API-nyckeln tom för att behålla den nuvarande. Enhetstester och avinstallation kräver alltid uttryckligt godkännande.",
+        "data": {
+          "openai_api_key": "Ny OpenAI API-nyckel",
+          "model": "Modell",
+          "auto_deploy": "Godkänn automatiskt distribution av kod",
+          "auto_restart": "Godkänn automatiskt omstarter av Core"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Ange ett modellnamn."
+    }
+  }
+}

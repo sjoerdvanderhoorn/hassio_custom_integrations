@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "একটি AI এজেন্ট দিয়ে কাস্টম ইন্টিগ্রেশন তৈরি ও রক্ষণাবেক্ষণ করুন। OpenAI Platform API কী কনফিগার করুন। অনুমোদনের পরে তৈরি কোড Home Assistant-এর অনুমতি নিয়ে চলতে পারে।",
+        "data": {
+          "openai_api_key": "OpenAI API কী",
+          "model": "মডেল",
+          "auto_deploy": "কোড স্থাপন স্বয়ংক্রিয়ভাবে অনুমোদন করুন",
+          "auto_restart": "Core পুনরায় চালু করা স্বয়ংক্রিয়ভাবে অনুমোদন করুন"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "একটি OpenAI API কী লিখুন।",
+      "missing_model": "একটি মডেলের নাম লিখুন।"
+    },
+    "abort": {
+      "already_configured": "Custom Integrations ইতিমধ্যেই কনফিগার করা হয়েছে।"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations বিকল্প",
+        "description": "বর্তমান কী রাখতে API কী খালি রাখুন। ডিভাইস পরীক্ষা ও আনইনস্টল করতে সর্বদা স্পষ্ট অনুমোদন প্রয়োজন।",
+        "data": {
+          "openai_api_key": "প্রতিস্থাপন OpenAI API কী",
+          "model": "মডেল",
+          "auto_deploy": "কোড স্থাপন স্বয়ংক্রিয়ভাবে অনুমোদন করুন",
+          "auto_restart": "Core পুনরায় চালু করা স্বয়ংক্রিয়ভাবে অনুমোদন করুন"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "একটি মডেলের নাম লিখুন।"
+    }
+  }
+}

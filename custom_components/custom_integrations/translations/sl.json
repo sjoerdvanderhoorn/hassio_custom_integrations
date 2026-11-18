@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Ustvarjajte in vzdržujte integracije po meri z agentom UI. Nastavite ključ API za OpenAI Platform. Ustvarjena koda lahko po odobritvi deluje z dovoljenji Home Assistant.",
+        "data": {
+          "openai_api_key": "Ključ API OpenAI",
+          "model": "Model",
+          "auto_deploy": "Samodejno odobri namestitev kode",
+          "auto_restart": "Samodejno odobri ponovne zagone Core"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Vnesite ključ API OpenAI.",
+      "missing_model": "Vnesite ime modela."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations je že nastavljen."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Možnosti Custom Integrations",
+        "description": "Za ohranitev trenutnega ključa pustite ključ API prazen. Preizkusi naprav in odstranitev vedno zahtevajo izrecno odobritev.",
+        "data": {
+          "openai_api_key": "Nadomestni ključ API OpenAI",
+          "model": "Model",
+          "auto_deploy": "Samodejno odobri namestitev kode",
+          "auto_restart": "Samodejno odobri ponovne zagone Core"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Vnesite ime modela."
+    }
+  }
+}

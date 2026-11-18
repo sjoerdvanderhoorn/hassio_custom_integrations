@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Створюйте та підтримуйте власні інтеграції за допомогою ШІ-агента. Налаштуйте API-ключ OpenAI Platform. Після схвалення створений код може працювати з дозволами Home Assistant.",
+        "data": {
+          "openai_api_key": "API-ключ OpenAI",
+          "model": "Модель",
+          "auto_deploy": "Автоматично схвалювати розгортання коду",
+          "auto_restart": "Автоматично схвалювати перезапуски Core"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Введіть API-ключ OpenAI.",
+      "missing_model": "Введіть назву моделі."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations уже налаштовано."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Параметри Custom Integrations",
+        "description": "Залиште API-ключ порожнім, щоб зберегти поточний. Тестування пристроїв і видалення завжди потребують явного схвалення.",
+        "data": {
+          "openai_api_key": "Новий API-ключ OpenAI",
+          "model": "Модель",
+          "auto_deploy": "Автоматично схвалювати розгортання коду",
+          "auto_restart": "Автоматично схвалювати перезапуски Core"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Введіть назву моделі."
+    }
+  }
+}

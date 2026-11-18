@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "สร้างและดูแลการผสานรวมแบบกำหนดเองด้วยเอเจนต์ AI ตั้งค่าคีย์ API ของ OpenAI Platform โค้ดที่สร้างขึ้นสามารถทำงานด้วยสิทธิ์ของ Home Assistant ได้หลังจากได้รับการอนุมัติ",
+        "data": {
+          "openai_api_key": "คีย์ API ของ OpenAI",
+          "model": "โมเดล",
+          "auto_deploy": "อนุมัติการติดตั้งโค้ดโดยอัตโนมัติ",
+          "auto_restart": "อนุมัติการเริ่ม Core ใหม่โดยอัตโนมัติ"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "ป้อนคีย์ API ของ OpenAI",
+      "missing_model": "ป้อนชื่อโมเดล"
+    },
+    "abort": {
+      "already_configured": "ตั้งค่า Custom Integrations ไว้แล้ว"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "ตัวเลือก Custom Integrations",
+        "description": "เว้นคีย์ API ว่างไว้เพื่อใช้คีย์ปัจจุบัน การทดสอบอุปกรณ์และการถอนการติดตั้งต้องได้รับการอนุมัติอย่างชัดเจนเสมอ",
+        "data": {
+          "openai_api_key": "คีย์ API ของ OpenAI ใหม่",
+          "model": "โมเดล",
+          "auto_deploy": "อนุมัติการติดตั้งโค้ดโดยอัตโนมัติ",
+          "auto_restart": "อนุมัติการเริ่ม Core ใหม่โดยอัตโนมัติ"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "ป้อนชื่อโมเดล"
+    }
+  }
+}

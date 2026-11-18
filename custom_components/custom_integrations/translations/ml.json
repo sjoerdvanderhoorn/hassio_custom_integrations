@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "AI ഏജന്റിലൂടെ കസ്റ്റം ഇന്റഗ്രേഷനുകൾ സൃഷ്ടിക്കുകയും പരിപാലിക്കുകയും ചെയ്യുക. OpenAI Platform API കീ ക്രമീകരിക്കുക. അംഗീകാരത്തിന് ശേഷം സൃഷ്ടിച്ച കോഡിന് Home Assistant അനുമതികളോടെ പ്രവർത്തിക്കാം.",
+        "data": {
+          "openai_api_key": "OpenAI API കീ",
+          "model": "മോഡൽ",
+          "auto_deploy": "കോഡ് വിന്യാസം സ്വയമേവ അംഗീകരിക്കുക",
+          "auto_restart": "Core പുനരാരംഭിക്കുന്നത് സ്വയമേവ അംഗീകരിക്കുക"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "OpenAI API കീ നൽകുക.",
+      "missing_model": "മോഡലിന്റെ പേര് നൽകുക."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations ഇതിനകം ക്രമീകരിച്ചിട്ടുണ്ട്."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations ഓപ്ഷനുകൾ",
+        "description": "നിലവിലെ കീ നിലനിർത്താൻ API കീ ശൂന്യമായി വിടുക. ഉപകരണ പരിശോധനയ്ക്കും അൺഇൻസ്റ്റാൾ ചെയ്യുന്നതിനും എല്ലായ്പ്പോഴും വ്യക്തമായ അംഗീകാരം ആവശ്യമാണ്.",
+        "data": {
+          "openai_api_key": "പകരം OpenAI API കീ",
+          "model": "മോഡൽ",
+          "auto_deploy": "കോഡ് വിന്യാസം സ്വയമേവ അംഗീകരിക്കുക",
+          "auto_restart": "Core പുനരാരംഭിക്കുന്നത് സ്വയമേവ അംഗീകരിക്കുക"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "മോഡലിന്റെ പേര് നൽകുക."
+    }
+  }
+}

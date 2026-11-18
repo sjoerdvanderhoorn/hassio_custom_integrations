@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Crie e mantenha integrações personalizadas com um agente de IA. Configure uma chave API da OpenAI Platform. O código gerado pode ser executado com as permissões do Home Assistant após aprovação.",
+        "data": {
+          "openai_api_key": "Chave API da OpenAI",
+          "model": "Modelo",
+          "auto_deploy": "Aprovar automaticamente a implementação de código",
+          "auto_restart": "Aprovar automaticamente os reinícios do Core"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Introduza uma chave API da OpenAI.",
+      "missing_model": "Introduza um nome de modelo."
+    },
+    "abort": {
+      "already_configured": "O Custom Integrations já está configurado."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opções do Custom Integrations",
+        "description": "Deixe a chave API em branco para manter a atual. Os testes de dispositivos e a desinstalação exigem sempre aprovação explícita.",
+        "data": {
+          "openai_api_key": "Chave API da OpenAI de substituição",
+          "model": "Modelo",
+          "auto_deploy": "Aprovar automaticamente a implementação de código",
+          "auto_restart": "Aprovar automaticamente os reinícios do Core"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Introduza um nome de modelo."
+    }
+  }
+}

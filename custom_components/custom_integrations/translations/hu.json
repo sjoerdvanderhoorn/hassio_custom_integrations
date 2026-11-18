@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Hozzon létre és tartson karban egyéni integrációkat egy AI-ügynökkel. Állítson be egy OpenAI Platform API-kulcsot. A létrehozott kód jóváhagyás után a Home Assistant jogosultságaival futhat.",
+        "data": {
+          "openai_api_key": "OpenAI API-kulcs",
+          "model": "Modell",
+          "auto_deploy": "Kódtelepítés automatikus jóváhagyása",
+          "auto_restart": "Core-újraindítások automatikus jóváhagyása"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Adjon meg egy OpenAI API-kulcsot.",
+      "missing_model": "Adjon meg egy modellnevet."
+    },
+    "abort": {
+      "already_configured": "A Custom Integrations már be van állítva."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations beállításai",
+        "description": "A jelenlegi kulcs megtartásához hagyja üresen az API-kulcsot. Az eszköztesztekhez és az eltávolításhoz mindig kifejezett jóváhagyás szükséges.",
+        "data": {
+          "openai_api_key": "Új OpenAI API-kulcs",
+          "model": "Modell",
+          "auto_deploy": "Kódtelepítés automatikus jóváhagyása",
+          "auto_restart": "Core-újraindítások automatikus jóváhagyása"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Adjon meg egy modellnevet."
+    }
+  }
+}

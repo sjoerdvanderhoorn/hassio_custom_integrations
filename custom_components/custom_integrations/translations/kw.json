@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Gwruthyl ha mentena yntegracyons personel gans agent AI. Kevrewgh alhwedh API OpenAI Platform. Kod dinythys a yll resek gans grontow Home Assistant wosa komendans.",
+        "data": {
+          "openai_api_key": "Alhwedh API OpenAI",
+          "model": "Model",
+          "auto_deploy": "Komendya displegyans kod yn awtomatek",
+          "auto_restart": "Komendya dalleth Core arta yn awtomatek"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Gorrewgh alhwedh API OpenAI.",
+      "missing_model": "Gorrewgh hanow model."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations yw kevres seulabrys."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Dewisyow Custom Integrations",
+        "description": "Gesewgh an alhwedh API gwag rag gwitha an alhwedh a-lemmyn. Profow devis ha dileans a wra pes gorhemmynans apert pub eur.",
+        "data": {
+          "openai_api_key": "Alhwedh API OpenAI nowydh",
+          "model": "Model",
+          "auto_deploy": "Komendya displegyans kod yn awtomatek",
+          "auto_restart": "Komendya dalleth Core arta yn awtomatek"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Gorrewgh hanow model."
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Bir yapay zekâ aracısıyla özel entegrasyonlar oluşturun ve bakımını yapın. Bir OpenAI Platform API anahtarı yapılandırın. Oluşturulan kod, onaydan sonra Home Assistant izinleriyle çalışabilir.",
+        "data": {
+          "openai_api_key": "OpenAI API anahtarı",
+          "model": "Model",
+          "auto_deploy": "Kod dağıtımını otomatik onayla",
+          "auto_restart": "Core yeniden başlatmalarını otomatik onayla"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Bir OpenAI API anahtarı girin.",
+      "missing_model": "Bir model adı girin."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations zaten yapılandırılmış."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations seçenekleri",
+        "description": "Geçerli anahtarı korumak için API anahtarını boş bırakın. Cihaz testleri ve kaldırma işlemi her zaman açık onay gerektirir.",
+        "data": {
+          "openai_api_key": "Yeni OpenAI API anahtarı",
+          "model": "Model",
+          "auto_deploy": "Kod dağıtımını otomatik onayla",
+          "auto_restart": "Core yeniden başlatmalarını otomatik onayla"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Bir model adı girin."
+    }
+  }
+}

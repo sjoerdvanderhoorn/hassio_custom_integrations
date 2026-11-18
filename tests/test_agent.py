@@ -95,7 +95,7 @@ def test_persistent_agent_session_executes_tool_and_followup(tmp_path, monkeypat
         def stream(self, session_id):
             assert session_id == 'sess-abc'
             return Stream()
-        def create(self, session_id, events):
+        def create(self, session_id, events, **kwargs):
             tool_results.extend(events)
 
     class Sessions:

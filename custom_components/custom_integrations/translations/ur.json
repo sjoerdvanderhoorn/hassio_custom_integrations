@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "AI ایجنٹ کے ذریعے حسب ضرورت انٹیگریشنز بنائیں اور برقرار رکھیں۔ OpenAI Platform API کلید ترتیب دیں۔ منظوری کے بعد تیار کردہ کوڈ Home Assistant کی اجازتوں کے ساتھ چل سکتا ہے۔",
+        "data": {
+          "openai_api_key": "OpenAI API کلید",
+          "model": "ماڈل",
+          "auto_deploy": "کوڈ کی تعیناتی کو خودکار طور پر منظور کریں",
+          "auto_restart": "Core دوبارہ شروع کرنے کو خودکار طور پر منظور کریں"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "OpenAI API کلید درج کریں۔",
+      "missing_model": "ماڈل کا نام درج کریں۔"
+    },
+    "abort": {
+      "already_configured": "Custom Integrations پہلے ہی ترتیب دیا جا چکا ہے۔"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations اختیارات",
+        "description": "موجودہ کلید رکھنے کے لیے API کلید خالی چھوڑیں۔ آلات کی جانچ اور ان انسٹال کے لیے ہمیشہ واضح منظوری درکار ہوتی ہے۔",
+        "data": {
+          "openai_api_key": "متبادل OpenAI API کلید",
+          "model": "ماڈل",
+          "auto_deploy": "کوڈ کی تعیناتی کو خودکار طور پر منظور کریں",
+          "auto_restart": "Core دوبارہ شروع کرنے کو خودکار طور پر منظور کریں"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "ماڈل کا نام درج کریں۔"
+    }
+  }
+}

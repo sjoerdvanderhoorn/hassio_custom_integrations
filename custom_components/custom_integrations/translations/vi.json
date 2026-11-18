@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Tạo và duy trì các tích hợp tùy chỉnh bằng tác nhân AI. Cấu hình khóa API OpenAI Platform. Mã được tạo có thể chạy với quyền của Home Assistant sau khi được phê duyệt.",
+        "data": {
+          "openai_api_key": "Khóa API OpenAI",
+          "model": "Mô hình",
+          "auto_deploy": "Tự động phê duyệt triển khai mã",
+          "auto_restart": "Tự động phê duyệt khởi động lại Core"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Nhập khóa API OpenAI.",
+      "missing_model": "Nhập tên mô hình."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations đã được cấu hình."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Tùy chọn Custom Integrations",
+        "description": "Để trống khóa API để giữ khóa hiện tại. Việc kiểm tra thiết bị và gỡ cài đặt luôn cần phê duyệt rõ ràng.",
+        "data": {
+          "openai_api_key": "Khóa API OpenAI thay thế",
+          "model": "Mô hình",
+          "auto_deploy": "Tự động phê duyệt triển khai mã",
+          "auto_restart": "Tự động phê duyệt khởi động lại Core"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Nhập tên mô hình."
+    }
+  }
+}

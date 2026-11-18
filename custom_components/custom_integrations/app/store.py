@@ -35,6 +35,8 @@ class Store:
         self.data.setdefault('installations', {})
         self.data.setdefault('controls', {})
         self.data.setdefault('removals', {})
+        self.data.setdefault('discoveries', {})
+        self.data.setdefault('recoveries', {})
         # Old installation cards lacked a timeline anchor. Infer it once, never move on refresh.
         for item in self.data['installations'].values():
             if 'after_message' not in item:
@@ -65,10 +67,16 @@ class Store:
             conversation = self.data["conversations"].get(ident)
             return deepcopy(conversation) if conversation else None
 
+    def confirm_custom_build(self,ident):
+        with self.lock:
+            record=self.data['discoveries'].get(ident)
+            if not record or not record.get('matches'): raise ValueError('No existing-integration choice is pending')
+            record['custom_approved']=True;self.save()
+
     def set_session(self, ident: str, session_id: str):
         with self.lock:
             self.data["conversations"][ident]["session_id"] = session_id
-            self.data["conversations"][ident]['session_revision'] = 9
+            self.data["conversations"][ident]['session_revision'] = 10
             self.save()
 
     def add_message(self, ident: str, role: str, content: str, *, extra: dict | None = None):

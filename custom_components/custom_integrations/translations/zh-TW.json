@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "使用 AI 代理程式建立及維護自訂整合。請設定 OpenAI Platform API 金鑰。產生的程式碼經核准後可使用 Home Assistant 的權限執行。",
+        "data": {
+          "openai_api_key": "OpenAI API 金鑰",
+          "model": "模型",
+          "auto_deploy": "自動核准部署程式碼",
+          "auto_restart": "自動核准重新啟動 Core"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "請輸入 OpenAI API 金鑰。",
+      "missing_model": "請輸入模型名稱。"
+    },
+    "abort": {
+      "already_configured": "Custom Integrations 已設定。"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations 選項",
+        "description": "將 API 金鑰留空即可保留目前的金鑰。裝置測試及解除安裝一律需要明確核准。",
+        "data": {
+          "openai_api_key": "替換 OpenAI API 金鑰",
+          "model": "模型",
+          "auto_deploy": "自動核准部署程式碼",
+          "auto_restart": "自動核准重新啟動 Core"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "請輸入模型名稱。"
+    }
+  }
+}

@@ -22,7 +22,7 @@ Code is staged and validated before deployment. Newly generated integrations rec
 
 Installed/configured integrations appear in the normal overview. A sparkle marks integrations managed by this tool. On a managed integration's detail page, **Edit custom integration** opens its chat. Use the conversation selector to open previous chats or start another. The issue/device/capability suggestions prefill the composer. Native Add entry/device controls remain available when the integration supports them.
 
-The composer grows with your text. Enter adds a line; Ctrl+Enter or Shift+Enter sends. You can send a follow-up while an agent that supports steering is working. **Stop** blocks further local actions and requests remote cancellation. Escape closes either popup. Closing a chat keeps the agent working.
+The composer grows with your text. Enter sends; Ctrl+Enter or Shift+Enter adds a new line. You can send a follow-up while an agent that supports steering is working. **Stop** blocks further local actions and requests remote cancellation. Escape closes either popup. Closing a chat keeps the agent working.
 
 If source is staged but not installed/configured, ask the agent in a creation chat to inspect and continue its domain. Only named managed integrations retain discoverable related conversations; abandoned drafts do not appear as integration entries.
 
@@ -56,8 +56,16 @@ If controls are missing, verify that the config entry is loaded, use an administ
 
 ## Privacy and limitations
 
-The chat runs in a same-origin modal frame and uses the signed-in administrator's HA authentication. Static assets contain no credentials; access tokens are not put in URLs or browser storage. Config/options use HA translation files; the chat has an English catalogue/fallback and additional controls are English.
+The chat runs in a same-origin modal frame and uses the signed-in administrator's HA authentication. Static assets contain no credentials; access tokens are not put in URLs or browser storage. Config/options use HA translation files for all 66 languages listed in the linked Assist language reference. The chat has a separate English catalogue/fallback and additional controls are English. See [Translations](TRANSLATIONS.md) for scope and language codes.
 
 Prompts, recent conversation context and returned tool results can be sent to OpenAI. Hosted research/browsing and API usage can incur charges. The integration does not silently substitute another API or model if access is unavailable.
 
 Generated Python runs with Core permissions. Static checks, explicit approvals and backups reduce accidents; they do not prove code safe. Review source, use trusted administrators, and test new integrations on a disposable HA instance before relying on them.
+
+## Existing integrations, stream recovery and code history
+
+New builds begin with agent research and an existing-integration check. Matches are shown before new source is created. Use their documentation/setup links or explicitly choose Build my own anyway. A plain-language request to proceed can trigger a custom-build approval. Research remains an AI judgment, not an exhaustive guarantee that no integration exists.
+
+When a stream closes unexpectedly, the chat records three automatic reconnect attempts to the same session. Completed mutations are not replayed. If recovery remains unconfirmed, use Retry or send a smaller follow-up after reviewing the current state. A missing final event can also be reconciled from a completed observed turn's stored output.
+
+Successful source/icon batches and imports/deployments save compressed dated code snapshots under .storage/custom_integrations/snapshots. Retention is the latest 100 revisions plus up to 30 daily checkpoints; identical content is deduplicated. Ask for a revision list or a specific point in time. The agent can inspect historical files and request approval for a restore. Restoration changes staging only; deployment and any restart are separate approved actions. Snapshots contain code, not HA credentials/configuration entries. See RELEASE-NOTES.md for test-build details.

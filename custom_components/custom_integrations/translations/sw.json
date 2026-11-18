@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Unda na udumishe miunganisho maalumu kwa wakala wa AI. Sanidi ufunguo wa API wa OpenAI Platform. Msimbo uliotengenezwa unaweza kuendeshwa kwa ruhusa za Home Assistant baada ya kuidhinishwa.",
+        "data": {
+          "openai_api_key": "Ufunguo wa API wa OpenAI",
+          "model": "Muundo",
+          "auto_deploy": "Idhinisha uwekaji wa msimbo kiotomatiki",
+          "auto_restart": "Idhinisha uanzishaji upya wa Core kiotomatiki"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Weka ufunguo wa API wa OpenAI.",
+      "missing_model": "Weka jina la muundo."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations tayari imesanidiwa."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Chaguo za Custom Integrations",
+        "description": "Acha ufunguo wa API wazi ili kuhifadhi ufunguo wa sasa. Majaribio ya vifaa na uondoaji daima huhitaji idhini ya wazi.",
+        "data": {
+          "openai_api_key": "Ufunguo mpya wa API wa OpenAI",
+          "model": "Muundo",
+          "auto_deploy": "Idhinisha uwekaji wa msimbo kiotomatiki",
+          "auto_restart": "Idhinisha uanzishaji upya wa Core kiotomatiki"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Weka jina la muundo."
+    }
+  }
+}

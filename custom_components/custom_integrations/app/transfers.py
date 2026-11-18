@@ -82,6 +82,7 @@ class Transfers:
                 path=staging/name; path.parent.mkdir(parents=True,exist_ok=True); path.write_bytes(data)
             staging.rename(target)
         logger.info('Integration imported into staging | domain=%s',domain)
+        self.manager.history.save(domain,'Imported integration')
         self.store.audit('import_integration',{'domain':domain,'files':len(checked)})
         return {'domain':domain,'name':manifest['name'],'installed':False,'validation':self.manager.validate(domain)}
 

@@ -56,9 +56,11 @@ def is_below(base: Path, target: Path):
 
 class IntegrationManager:
     def __init__(self, data: Path, ha_config: Path):
+        from .history import History
         self.blocked_domains = set()
         self.workspaces = data / "workspaces"
         self.backups = data / "backups"
+        self.history = History(self)
         self.installed = ha_config / "custom_components"
         self.workspaces.mkdir(parents=True, exist_ok=True)
         self.backups.mkdir(parents=True, exist_ok=True)
@@ -105,6 +107,7 @@ class IntegrationManager:
             checked.append((rel, content))
         if size > MAX_TOTAL:
             raise IntegrationError("Total size too large")
+        self.history.save(domain,'Before file update')
         base.mkdir(parents=True, exist_ok=True)
         for rel, content in checked:
             path = base / rel
@@ -114,15 +117,18 @@ class IntegrationManager:
             temp = path.with_name(path.name + ".tmp")
             temp.write_text(content, encoding="utf-8")
             os.replace(temp, path)
-        return {"domain": domain, "written": [str(p) for p, _ in checked], "validation": self.validate(domain)}
+        revision=self.history.save(domain,'Files updated')
+        return {"revision":revision, "domain": domain, "written": [str(p) for p, _ in checked], "validation": self.validate(domain)}
 
     def generate_icon(self, domain, background, shapes):
         content=render_icon(background,shapes)
         base=self.workspace(domain);path=base/'brand'/'icon.png'
         if not is_below(base,path) or any(p.is_symlink() for p in [*path.parents,path]):
             raise IntegrationError('Symbolic links are not allowed')
+        self.history.save(domain,'Before icon update')
         path.parent.mkdir(parents=True,exist_ok=True)
         temp=path.with_name('icon.png.tmp');temp.write_bytes(content);os.replace(temp,path)
+        self.history.save(domain,'Icon updated')
         return {'domain':domain,'path':'brand/icon.png','width':256,'height':256,'sha256':hashlib.sha256(content).hexdigest()}
 
     def has_icon(self, domain):
@@ -145,6 +151,15 @@ class IntegrationManager:
             content=p.read_bytes()
             return {'domain':domain,'path':file,'format':'PNG','bytes':len(content),'sha256':hashlib.sha256(content).hexdigest()}
         return {"domain": domain, "path": file, "content": p.read_text(encoding="utf-8")}
+
+    def read_files(self,domain,paths,deployed=False):
+        if not isinstance(paths,list) or not 1<=len(paths)<=30: raise IntegrationError('Read 1 to 30 files')
+        results=[];total=0
+        for path in dict.fromkeys(paths):
+            item=self.read_file(domain,path,deployed);total+=len(item.get('content','').encode('utf-8'))
+            if total>90000: raise IntegrationError('Combined read exceeds 90 KB; request fewer files')
+            results.append(item)
+        return {'domain':domain,'files':results}
 
     def validate(self, domain: str):
         base = self.workspace(domain)
@@ -258,6 +273,7 @@ class IntegrationManager:
         if target.exists() and not (target / MARKER).is_file():
             raise IntegrationError("An unmanaged integration with this domain already exists; refusing to overwrite")
         self.installed.mkdir(parents=True, exist_ok=True)
+        if target.exists(): self.history.save(domain,'Before deployment',target)
         stamp, backup = self._backup(domain, target)
         temp_parent = Path(tempfile.mkdtemp(prefix="ai_builder_", dir=self.installed))
         staged = temp_parent / domain
@@ -283,7 +299,8 @@ class IntegrationManager:
             raise
         finally:
             shutil.rmtree(temp_parent, ignore_errors=True)
-        return {"deployed": domain, "backup": stamp if backup.exists() else None, "restart_required": True}
+        self.history.save(domain,'Installed deployment',target)
+        return {"integration_name":json.loads((target/'manifest.json').read_text(encoding='utf-8')).get('name',domain), "integration_path":'/config/integrations/integration/'+domain, "deployed": domain, "backup": stamp if backup.exists() else None, "restart_required": True}
 
     def rollback(self, domain: str, backup: str):
         validate_domain(domain)

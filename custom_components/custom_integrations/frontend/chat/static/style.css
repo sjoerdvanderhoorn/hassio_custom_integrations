@@ -26,3 +26,26 @@ body{font-family:var(--primary-font-family);font-size:14px}.app-bar,.sidebar,.in
 html,body{height:100%;overflow:hidden}.layout{display:block;height:100dvh;min-height:0}.main{height:100%;min-height:0}.chat-header{gap:12px;flex-wrap:wrap}.chat-header select{max-width:55%;border:1px solid var(--divider-color);border-radius:8px;padding:8px;color:var(--primary-text-color);background:var(--card-background-color);font:inherit}.chat{padding-bottom:16px}.composer-area{padding-bottom:max(8px,env(safe-area-inset-bottom))}
 
 .chat-suggestions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.chat-suggestions .issue-suggestion{margin:0}.integration-landing{padding-top:16px}
+
+.progress-group{margin:14px 0 20px;padding:4px 0 4px 14px;border:0;border-left:2px solid var(--divider-color);border-radius:0;background:transparent;box-shadow:none}.agent-step,.tool-step{border:0;background:transparent;border-radius:10px;margin:2px 0;overflow:hidden}.agent-step summary,.tool-step summary{display:flex;align-items:center;gap:10px;padding:10px 8px;list-style:none;font-size:13px;font-weight:400;color:var(--secondary-text-color)}.agent-step summary:hover,.tool-step summary:hover{background:var(--secondary-background-color)}.step-indicator{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:12px;flex-shrink:0;background:var(--secondary-background-color);color:var(--primary-color)}.step-status{margin-left:auto;font-size:11px;opacity:.7}.previous-steps{border:0;background:transparent;margin:2px 0}.previous-steps>summary{padding:8px;color:var(--secondary-text-color);font-size:12px}.diagnostics{font-size:11px;line-height:1.6;padding:14px;background:var(--secondary-background-color);border-radius:8px;max-height:260px;overflow:auto}.thinking-indicator{padding:8px}.discovery-card{border:1px solid var(--divider-color);border-radius:16px;padding:20px;margin:12px 0;background:var(--card-background-color)}.discovery-card a{color:var(--primary-color)}.discovery-card p{line-height:1.6}.discovery-card .existing-setup{display:block;margin-bottom:18px}.retry-stream{margin-top:10px}
+
+.tool-step.working summary{color:var(--primary-text-color)}.tool-step.working .step-indicator{background:transparent;animation:ci-spin 1.2s linear infinite}.tool-step.done .step-indicator{color:var(--success-color,#0b8043)}.tool-step.failed .step-indicator{color:var(--error-color,#db4437)}@keyframes ci-spin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.tool-step.working .step-indicator{animation:none}}
+
+/* Compact action rows: one consistent status column and one disclosure control. */
+.progress-group{border:0;padding:0;margin:4px 0 12px}
+.tool-step,.previous-steps .tool-step{border:0;border-radius:0;margin:0;overflow:visible}
+.tool-step>summary{display:grid;grid-template-columns:20px minmax(0,1fr) 84px 20px;gap:10px;padding:9px 8px;border:0;border-radius:8px;min-height:40px}
+.tool-step>summary:after,.previous-steps>summary:before{content:none}
+.step-label{min-width:0;overflow-wrap:anywhere}
+.tool-step .step-status{display:block;margin:0;padding:0;background:transparent;border-radius:0;text-align:right;opacity:1;font-size:11px;color:var(--secondary-text-color)}
+.tool-step.failed .step-status{color:var(--error-color)}
+.disclosure-icon{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;justify-self:end;transition:transform .15s ease}
+details[open]>summary>.disclosure-icon{transform:rotate(90deg)}
+summary::-webkit-details-marker{display:none}
+.previous-steps>summary{display:flex;align-items:center;gap:8px;padding:8px;list-style:none;border-radius:8px}
+.previous-steps>summary>.disclosure-icon{width:14px;height:14px}
+.previous-steps>summary:hover{background:var(--secondary-background-color)}
+.tool-step>.diagnostics{margin:2px 8px 10px 38px;border:0;border-radius:8px;padding:12px;max-height:280px}
+@media(max-width:560px){.tool-step>summary{grid-template-columns:20px minmax(0,1fr) 68px 16px;gap:7px}.tool-step .step-status{display:block;font-size:10px}}
+@media(prefers-reduced-motion:reduce){.disclosure-icon{transition:none}}
+.previous-steps[open]>summary:before{content:none}

@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Δημιουργήστε και συντηρήστε προσαρμοσμένες ενσωματώσεις με έναν πράκτορα AI. Ρυθμίστε ένα κλειδί API της OpenAI Platform. Ο παραγόμενος κώδικας μπορεί να εκτελείται με τα δικαιώματα του Home Assistant μετά από έγκριση.",
+        "data": {
+          "openai_api_key": "Κλειδί API OpenAI",
+          "model": "Μοντέλο",
+          "auto_deploy": "Αυτόματη έγκριση εγκατάστασης κώδικα",
+          "auto_restart": "Αυτόματη έγκριση επανεκκινήσεων του Core"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Εισαγάγετε ένα κλειδί API OpenAI.",
+      "missing_model": "Εισαγάγετε ένα όνομα μοντέλου."
+    },
+    "abort": {
+      "already_configured": "Το Custom Integrations έχει ήδη ρυθμιστεί."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Επιλογές Custom Integrations",
+        "description": "Αφήστε το κλειδί API κενό για να διατηρήσετε το τρέχον. Οι δοκιμές συσκευών και η απεγκατάσταση απαιτούν πάντα ρητή έγκριση.",
+        "data": {
+          "openai_api_key": "Νέο κλειδί API OpenAI",
+          "model": "Μοντέλο",
+          "auto_deploy": "Αυτόματη έγκριση εγκατάστασης κώδικα",
+          "auto_restart": "Αυτόματη έγκριση επανεκκινήσεων του Core"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Εισαγάγετε ένα όνομα μοντέλου."
+    }
+  }
+}

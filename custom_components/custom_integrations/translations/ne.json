@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "AI एजेन्टबाट अनुकूलित एकीकरणहरू बनाउनुहोस् र मर्मत गर्नुहोस्। OpenAI Platform API कुञ्जी कन्फिगर गर्नुहोस्। स्वीकृतिपछि उत्पन्न कोड Home Assistant को अनुमतिसहित चल्न सक्छ।",
+        "data": {
+          "openai_api_key": "OpenAI API कुञ्जी",
+          "model": "मोडेल",
+          "auto_deploy": "कोड परिचालन स्वचालित रूपमा स्वीकृत गर्नुहोस्",
+          "auto_restart": "Core पुनःसुरु स्वचालित रूपमा स्वीकृत गर्नुहोस्"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "OpenAI API कुञ्जी प्रविष्ट गर्नुहोस्।",
+      "missing_model": "मोडेलको नाम प्रविष्ट गर्नुहोस्।"
+    },
+    "abort": {
+      "already_configured": "Custom Integrations पहिल्यै कन्फिगर गरिएको छ।"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations विकल्पहरू",
+        "description": "हालको कुञ्जी राख्न API कुञ्जी खाली छोड्नुहोस्। उपकरण परीक्षण र अनइन्स्टल गर्न सधैं स्पष्ट स्वीकृति आवश्यक हुन्छ।",
+        "data": {
+          "openai_api_key": "प्रतिस्थापन OpenAI API कुञ्जी",
+          "model": "मोडेल",
+          "auto_deploy": "कोड परिचालन स्वचालित रूपमा स्वीकृत गर्नुहोस्",
+          "auto_restart": "Core पुनःसुरु स्वचालित रूपमा स्वीकृत गर्नुहोस्"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "मोडेलको नाम प्रविष्ट गर्नुहोस्।"
+    }
+  }
+}

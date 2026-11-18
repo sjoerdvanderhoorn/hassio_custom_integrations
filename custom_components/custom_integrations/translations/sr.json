@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Правите и одржавајте прилагођене интеграције помоћу AI агента. Подесите API кључ за OpenAI Platform. Генерисани код након одобрења може да ради са дозволама Home Assistant-а.",
+        "data": {
+          "openai_api_key": "OpenAI API кључ",
+          "model": "Модел",
+          "auto_deploy": "Аутоматски одобри постављање кода",
+          "auto_restart": "Аутоматски одобри поновна покретања Core-а"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Унесите OpenAI API кључ.",
+      "missing_model": "Унесите назив модела."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations је већ подешен."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Опције за Custom Integrations",
+        "description": "Оставите API кључ празан да бисте задржали тренутни. Тестови уређаја и деинсталација увек захтевају изричито одобрење.",
+        "data": {
+          "openai_api_key": "Заменски OpenAI API кључ",
+          "model": "Модел",
+          "auto_deploy": "Аутоматски одобри постављање кода",
+          "auto_restart": "Аутоматски одобри поновна покретања Core-а"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Унесите назив модела."
+    }
+  }
+}

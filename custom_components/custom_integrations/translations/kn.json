@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "AI ಏಜೆಂಟ್ ಮೂಲಕ ಕಸ್ಟಮ್ ಇಂಟಿಗ್ರೇಶನ್‌ಗಳನ್ನು ರಚಿಸಿ ಮತ್ತು ನಿರ್ವಹಿಸಿ. OpenAI Platform API ಕೀಯನ್ನು ಕಾನ್ಫಿಗರ್ ಮಾಡಿ. ಅನುಮೋದನೆಯ ನಂತರ ರಚಿಸಿದ ಕೋಡ್ Home Assistant ಅನುಮತಿಗಳೊಂದಿಗೆ ಕಾರ್ಯನಿರ್ವಹಿಸಬಹುದು.",
+        "data": {
+          "openai_api_key": "OpenAI API ಕೀ",
+          "model": "ಮಾದರಿ",
+          "auto_deploy": "ಕೋಡ್ ನಿಯೋಜನೆಯನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಅನುಮೋದಿಸಿ",
+          "auto_restart": "Core ಮರುಪ್ರಾರಂಭಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಅನುಮೋದಿಸಿ"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "OpenAI API ಕೀಯನ್ನು ನಮೂದಿಸಿ.",
+      "missing_model": "ಮಾದರಿಯ ಹೆಸರನ್ನು ನಮೂದಿಸಿ."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations ಈಗಾಗಲೇ ಕಾನ್ಫಿಗರ್ ಆಗಿದೆ."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations ಆಯ್ಕೆಗಳು",
+        "description": "ಪ್ರಸ್ತುತ ಕೀಯನ್ನು ಉಳಿಸಲು API ಕೀಯನ್ನು ಖಾಲಿ ಬಿಡಿ. ಸಾಧನ ಪರೀಕ್ಷೆ ಮತ್ತು ಅನ್‌ಇನ್‌ಸ್ಟಾಲ್‌ಗೆ ಯಾವಾಗಲೂ ಸ್ಪಷ್ಟ ಅನುಮೋದನೆ ಅಗತ್ಯ.",
+        "data": {
+          "openai_api_key": "ಬದಲಿ OpenAI API ಕೀ",
+          "model": "ಮಾದರಿ",
+          "auto_deploy": "ಕೋಡ್ ನಿಯೋಜನೆಯನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಅನುಮೋದಿಸಿ",
+          "auto_restart": "Core ಮರುಪ್ರಾರಂಭಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಅನುಮೋದಿಸಿ"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "ಮಾದರಿಯ ಹೆಸರನ್ನು ನಮೂದಿಸಿ."
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Veidojiet un uzturiet pielāgotas integrācijas ar MI aģentu. Iestatiet OpenAI Platform API atslēgu. Pēc apstiprināšanas ģenerētais kods var darboties ar Home Assistant atļaujām.",
+        "data": {
+          "openai_api_key": "OpenAI API atslēga",
+          "model": "Modelis",
+          "auto_deploy": "Automātiski apstiprināt koda izvietošanu",
+          "auto_restart": "Automātiski apstiprināt Core pārstartēšanu"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Ievadiet OpenAI API atslēgu.",
+      "missing_model": "Ievadiet modeļa nosaukumu."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations jau ir konfigurēts."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations opcijas",
+        "description": "Lai saglabātu pašreizējo atslēgu, atstājiet API atslēgu tukšu. Ierīču testiem un atinstalēšanai vienmēr nepieciešams nepārprotams apstiprinājums.",
+        "data": {
+          "openai_api_key": "Jauna OpenAI API atslēga",
+          "model": "Modelis",
+          "auto_deploy": "Automātiski apstiprināt koda izvietošanu",
+          "auto_restart": "Automātiski apstiprināt Core pārstartēšanu"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Ievadiet modeļa nosaukumu."
+    }
+  }
+}

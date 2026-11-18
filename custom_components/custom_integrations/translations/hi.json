@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "AI एजेंट से कस्टम इंटीग्रेशन बनाएँ और उनका रखरखाव करें। OpenAI Platform API कुंजी कॉन्फ़िगर करें। स्वीकृति के बाद बनाया गया कोड Home Assistant की अनुमतियों के साथ चल सकता है।",
+        "data": {
+          "openai_api_key": "OpenAI API कुंजी",
+          "model": "मॉडल",
+          "auto_deploy": "कोड डिप्लॉयमेंट को अपने आप मंज़ूरी दें",
+          "auto_restart": "Core को दोबारा चालू करने की अपने आप मंज़ूरी दें"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "OpenAI API कुंजी दर्ज करें।",
+      "missing_model": "मॉडल का नाम दर्ज करें।"
+    },
+    "abort": {
+      "already_configured": "Custom Integrations पहले से कॉन्फ़िगर है।"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations विकल्प",
+        "description": "वर्तमान कुंजी रखने के लिए API कुंजी खाली छोड़ें। डिवाइस परीक्षण और अनइंस्टॉल के लिए हमेशा स्पष्ट स्वीकृति आवश्यक है।",
+        "data": {
+          "openai_api_key": "नई OpenAI API कुंजी",
+          "model": "मॉडल",
+          "auto_deploy": "कोड डिप्लॉयमेंट को अपने आप मंज़ूरी दें",
+          "auto_restart": "Core को दोबारा चालू करने की अपने आप मंज़ूरी दें"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "मॉडल का नाम दर्ज करें।"
+    }
+  }
+}

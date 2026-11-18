@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Loo ja halda kohandatud integratsioone tehisintellekti agendiga. Seadista OpenAI Platformi API-võti. Loodud kood saab pärast kinnitamist töötada Home Assistanti õigustega.",
+        "data": {
+          "openai_api_key": "OpenAI API-võti",
+          "model": "Mudel",
+          "auto_deploy": "Kiida koodi paigaldamine automaatselt heaks",
+          "auto_restart": "Kiida Core'i taaskäivitused automaatselt heaks"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Sisesta OpenAI API-võti.",
+      "missing_model": "Sisesta mudeli nimi."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations on juba seadistatud."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrationsi valikud",
+        "description": "Praeguse võtme säilitamiseks jäta API-võti tühjaks. Seadmete testimine ja eemaldamine nõuavad alati selgesõnalist kinnitust.",
+        "data": {
+          "openai_api_key": "Uus OpenAI API-võti",
+          "model": "Mudel",
+          "auto_deploy": "Kiida koodi paigaldamine automaatselt heaks",
+          "auto_restart": "Kiida Core'i taaskäivitused automaatselt heaks"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Sisesta mudeli nimi."
+    }
+  }
+}

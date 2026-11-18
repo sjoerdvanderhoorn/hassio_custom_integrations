@@ -33,7 +33,7 @@ class NativeHA(HAClient):
     def check(self):
         async def run():
             if self.hass.is_stopping:raise RuntimeError('Home Assistant is stopping')
-            return {'connected':True,'version':getattr(ha_const,'__version__','unknown'),'location_name':self.hass.config.location_name}
+            return {'connected':True,'version':getattr(ha_const,'__version__','unknown'),'location_name':self.hass.config.location_name,'time_zone':getattr(self.hass.config,'time_zone','UTC'),'current_time_utc':__import__('datetime').datetime.now(__import__('datetime').timezone.utc).isoformat()}
         return self.submit(run())
 
     def entries(self,domain):

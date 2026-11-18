@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Luo ja ylläpidä mukautettuja integraatioita tekoälyagentilla. Määritä OpenAI Platformin API-avain. Luotu koodi voi hyväksynnän jälkeen toimia Home Assistantin käyttöoikeuksilla.",
+        "data": {
+          "openai_api_key": "OpenAI API-avain",
+          "model": "Malli",
+          "auto_deploy": "Hyväksy koodin käyttöönotto automaattisesti",
+          "auto_restart": "Hyväksy Coren uudelleenkäynnistykset automaattisesti"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Anna OpenAI API-avain.",
+      "missing_model": "Anna mallin nimi."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations on jo määritetty."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations -asetukset",
+        "description": "Jätä API-avain tyhjäksi säilyttääksesi nykyisen avaimen. Laitetestit ja asennuksen poisto vaativat aina nimenomaisen hyväksynnän.",
+        "data": {
+          "openai_api_key": "Korvaava OpenAI API-avain",
+          "model": "Malli",
+          "auto_deploy": "Hyväksy koodin käyttöönotto automaattisesti",
+          "auto_restart": "Hyväksy Coren uudelleenkäynnistykset automaattisesti"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Anna mallin nimi."
+    }
+  }
+}

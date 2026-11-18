@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Создавайте и поддерживайте пользовательские интеграции с ИИ-агентом. Настройте API-ключ OpenAI Platform. После одобрения созданный код может выполняться с правами Home Assistant.",
+        "data": {
+          "openai_api_key": "API-ключ OpenAI",
+          "model": "Модель",
+          "auto_deploy": "Автоматически одобрять установку кода",
+          "auto_restart": "Автоматически одобрять перезапуски Core"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Введите API-ключ OpenAI.",
+      "missing_model": "Введите название модели."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations уже настроен."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Параметры Custom Integrations",
+        "description": "Оставьте API-ключ пустым, чтобы сохранить текущий. Тестирование устройств и удаление всегда требуют явного одобрения.",
+        "data": {
+          "openai_api_key": "Новый API-ключ OpenAI",
+          "model": "Модель",
+          "auto_deploy": "Автоматически одобрять установку кода",
+          "auto_restart": "Автоматически одобрять перезапуски Core"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Введите название модели."
+    }
+  }
+}

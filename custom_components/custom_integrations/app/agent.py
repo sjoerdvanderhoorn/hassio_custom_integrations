@@ -77,7 +77,18 @@ INSTRUCTIONS += '\nWhen asked to remove an integration, use uninstall_integratio
 
 INSTRUCTIONS += '\nThis is the Marketplace/Core version. Never replace built-in Home Assistant integration domains; choose a unique custom domain. The chat is embedded in a modal on native integration pages, with previous conversations but no entity or activity sidebars. Keep the ordinary Home Assistant config flow/add-entry behavior available. For multi-device integrations, support adding independent devices through additional config entries with per-device unique IDs, or real HA subentries when appropriate; do not use single_config_entry or abort all further user flows unless the integration truly is single-instance. Never invent an Add device capability from a manifest flag. Core restarts interrupt local agent execution: durable installation progress resumes after restart; the user may need to send a new message for chat continuation.\n'
 
+INSTRUCTIONS += """
+Before creating a NEW integration, research whether an existing Home Assistant integration already meets the request. Check official HA documentation and reputable maintained custom integrations. Always call report_integration_discovery with your findings and verified links BEFORE writing files or generating an icon. If an existing integration meets the need, explain its name, capabilities and setup link in the response and WAIT for the user's choice. Do not build first. The user may explicitly choose Build my own anyway; then build the requested custom integration. If they insist in a plain message, call confirm_custom_integration to obtain the explicit custom-build approval. Do not apply this gate to ordinary edits of an existing managed integration. Do not claim no integration exists after a superficial search; be clear about uncertainty.
+After creation/update always state the exact integration name and give a Markdown link to /config/integrations/integration/<actual-domain>, noting any pending installation/setup/restart. Use only confirmed names/domains. Prefer read_integration_files for related source files, and the existing write_files tool for batch updates. list_revisions/read_revision_files expose dated code snapshots; use home_assistant_info to get Home Assistant's current date/timezone before interpreting yesterday. Choose a dated revision, explain whether it is staged or installed, and ask which one if the intended point is ambiguous. Never invent a revision when no matching history exists. Explain the selected revision and get explicit restore approval. restore_revision changes staging only: review/install/restart through the ordinary approved workflow to apply it. Never claim code snapshots restore credentials or HA configuration entries.
+"""
+
 TOOLS = [
+    fn('report_integration_discovery','Record prior research for a new integration. Matching existing integrations are shown to the user before any custom build. Provide verified official documentation URLs.',{'summary':s('What was researched and any uncertainty'),'matches':{'type':'array','maxItems':5,'items':{'type':'object','properties':{'domain':s('Existing HA integration domain'),'name':s('Integration name'),'url':s('Verified HTTPS documentation URL'),'reason':s('Why it meets the requested need')},'required':['domain','name','url','reason'],'additionalProperties':False}}},['summary','matches']),
+    fn('confirm_custom_integration','Ask explicit approval to build a custom integration instead of a reported existing match, when the user insists.',{},[]),
+    fn('read_integration_files','Read multiple related integration files in one call. Maximum 30 paths and 90 KB combined text.',{'domain':s('domain'),'paths':{'type':'array','items':{'type':'string'},'minItems':1,'maxItems':30},'deployed':{'type':'boolean'}},['domain','paths']),
+    fn('list_revisions','List dated compressed code snapshots, latest first, including file lists and whether code was staged or installed.',{'domain':s('domain')},['domain']),
+    fn('read_revision_files','Read multiple files from a dated code revision, without modifying source.',{'domain':s('domain'),'revision':s('Exact revision ID from list_revisions'),'paths':{'type':'array','items':{'type':'string'}}},['domain','revision','paths']),
+    fn('restore_revision','Restore a selected revision to staging only. Always requires explicit approval. Installation/restart are separate approved actions.',{'domain':s('domain'),'revision':s('Exact revision ID')},['domain','revision']),
     {"type": "web_search", "mode": "live"},
     {"type": "computer_use", "include_screenshots": False},
     fn("list_integrations", "List staged workspaces and builder-managed installed integrations", {}, []),
@@ -97,7 +108,7 @@ TOOLS = [
     fn("rollback_integration", "Restore a previous backup created by this builder; may require approval and requires a Core restart", {"domain": s("domain"), "backup": s("backup timestamp")}, ["domain", "backup"]),
     fn("uninstall_integration", "Remove managed config entries and code, preserving code backups. Always requires explicit approval. Core restart may be required.", {"domain": s("domain")}, ["domain"]),
     fn("list_backups", "List available backup timestamps for this integration", {"domain": s("domain")}, ["domain"]),
-    fn("home_assistant_info", "Check Home Assistant Core connectivity and version", {}, []),
+    fn("home_assistant_info", "Check Home Assistant Core connectivity, version, current UTC time and configured timezone", {}, []),
     fn("registered_entries", "Read Home Assistant config entries for a builder-managed integration", {"domain": s("domain")}, ["domain"]),
     fn("start_config_flow", "Start registration of an installed builder-managed integration; send only non-secret fields; pairing and secrets belong in the HA UI", {"domain": s("domain"), "values": o("Non-secret configuration fields such as host and port")}, ["domain"]),
     fn("read_integration_logs", "Read bounded recent log lines for this integration, with best-effort secret redaction", {"domain": s("domain"), "limit": {"type": "integer"}}, ["domain"]),
@@ -143,6 +154,10 @@ class Jobs:
             logger.info('Agent task started | job=%s',ident)
             return ident
 
+    def fields(self,ident,**values):
+        with self.lock:
+            self.jobs[ident].update(values);self._save(self.jobs[ident])
+
     def event(self, ident, kind, message):
         if kind == 'text':
             return  # Completed messages are persisted by Store; do not write every token delta.
@@ -156,6 +171,8 @@ class Jobs:
             job=self.jobs[ident]
             if not any(step['id']==call_id for step in job['steps']):
                 label=LABELS.get(name,'Running an agent action')
+                if name=='read_integration_files' and arguments.get('paths'):label=f"Reading {len(arguments.get('paths',[]))} integration files"
+                if name=='write_files' and arguments.get('files'):label=f"Updating {len(arguments.get('files',[]))} integration files"
                 if name=='test_light_or_switch' and {'brightness','brightness_pct'} & set(arguments.get('data') or {}):
                     label='Testing brightness control'
                 job['steps'].append({'id':call_id,'tool':name,'label':label,
@@ -243,6 +260,10 @@ class Jobs:
             self._save(self.jobs[ident])
 
 
+class StreamInterrupted(RuntimeError):
+    pass
+
+
 class AgentBridge:
     def __init__(self, store: Store, manager: IntegrationManager, ha: HAClient, jobs: Jobs, options: dict, installations=None):
         self.store, self.manager, self.ha, self.jobs, self.options = store, manager, ha, jobs, options
@@ -250,6 +271,7 @@ class AgentBridge:
         self.control_lock = threading.RLock()
         self.action_lock = threading.RLock()
         self.runtimes = {}
+        self.tool_outputs = {}
 
     def stopped(self, job):
         return bool(self.jobs.get(job).get('stop_requested'))
@@ -297,6 +319,12 @@ class AgentBridge:
         if not self.manager.workspace(domain).is_dir() and not (self.manager.installed_path(domain) / ".ai_builder_managed.json").is_file():
             raise IntegrationError("Only integrations developed by this builder are accessible")
 
+    def _require_history(self,domain):
+        self.manager.check_domain(domain)
+        target=self.manager.installed_path(domain)
+        if target.exists() and not (target/'.ai_builder_managed.json').is_file():raise IntegrationError('Refusing history access for an unmanaged installed domain')
+        if not self.manager.history.list(domain):self._require_managed(domain)
+
     def tool(self, name: str, args: dict, job: str):
         with self.action_lock:
             return self._tool(name,args,job)
@@ -306,10 +334,41 @@ class AgentBridge:
         domain = args.get("domain", "")
         try:
             if self.stopped(job): return {'ok':False,'reason':'The agent was stopped. No new action was started.'}
+            cid=self.jobs.get(job)['conversation_id']
+            if name=='confirm_custom_integration':
+                record=self.store.records('discoveries').get(cid)
+                if not record or not record.get('matches'):raise ValueError('Report existing matches first')
+                if not self.jobs.request_approval(job,'Build a custom integration instead',{'existing_options':[m['name'] for m in record['matches']],'impact':'Create custom code instead of using the existing integration.'}):return {'ok':False,'reason':'Custom build was not confirmed'}
+                if self.stopped(job):return {'ok':False,'reason':'Build was stopped'}
+                self.store.confirm_custom_build(cid);return {'ok':True,'custom_approved':True}
+            if name=='report_integration_discovery':
+                from urllib.parse import urlparse
+                matches=args.get('matches',[])
+                if not isinstance(matches,list) or len(matches)>5: raise ValueError('At most five matches are allowed')
+                for match in matches:
+                    validate_domain(match['domain'])
+                    parsed=urlparse(match['url'])
+                    if parsed.scheme!='https' or not parsed.hostname or parsed.username or parsed.password:raise ValueError('Use verified HTTPS documentation links without credentials')
+                    for key in ['name','reason','url']:
+                        if not isinstance(match[key],str) or len(match[key])>1500:raise ValueError('Discovery fields are too long')
+                    match['setup_available']=match['domain'] in mgr.blocked_domains or (mgr.installed_path(match['domain'])/'manifest.json').is_file()
+                previous=self.store.records('discoveries').get(cid,{})
+                if previous.get('matches') and not previous.get('custom_approved'):
+                    return {'ok':True,'needs_user_choice':True,'message':'Existing matches remain pending. Do not erase this choice or build until the user confirms.'}
+                record={'summary':str(args.get('summary',''))[:3000],'matches':matches,'custom_approved':previous.get('custom_approved',False) if not previous.get('consumed_domain') else False}
+                self.store.put('discoveries',cid,record)
+                if matches:
+                    self.store.add_message(cid,'assistant','An existing integration may meet your request. Review the options before building your own.',extra={'integration_discovery':record})
+                return {'ok':True,'needs_user_choice':bool(matches) and not record['custom_approved'],'message':'Wait for the user to choose.' if matches and not record['custom_approved'] else 'Discovery recorded; custom work may continue.'}
             if domain:
                 validate_domain(domain)
                 if name in {'write_files','generate_integration_icon'} or any(item['domain']==domain for item in mgr.list_domains()):
                     self.store.link_domain(self.jobs.get(job)['conversation_id'], domain)
+            if name in {'write_files','generate_integration_icon'} and not (mgr.workspace(domain)/'manifest.json').exists() and not (mgr.installed_path(domain)/'.ai_builder_managed.json').is_file():
+                discovery=self.store.records('discoveries').get(cid)
+                if not discovery or discovery.get('consumed_domain',domain)!=domain: return {'ok':False,'reason':'Research existing integrations and call report_integration_discovery before building a new one.'}
+                if discovery['matches'] and not discovery.get('custom_approved'):
+                    return {'ok':False,'reason':'Show the existing integration options and wait. The user must explicitly choose Build my own anyway.'}
             if name in {'install_integration','deploy_integration'} and not (mgr.installed_path(domain)/'.ai_builder_managed.json').is_file() and not mgr.has_icon(domain):
                 return {'ok':False,'reason':'Generate a matching icon with generate_integration_icon before installing this new integration.'}
             if name == 'install_integration':
@@ -339,6 +398,18 @@ class AgentBridge:
             elif name == "list_integrations": result = mgr.list_domains()
             elif name == "write_files": result = mgr.write_files(domain, args["files"])
             elif name == 'generate_integration_icon': result = mgr.generate_icon(domain,args['background'],args['shapes'])
+            elif name == 'read_integration_files': result=mgr.read_files(domain,args['paths'],args.get('deployed',False))
+            elif name == 'list_revisions':
+                self._require_history(domain);result=mgr.history.list(domain)
+            elif name == 'read_revision_files':
+                self._require_history(domain);result=mgr.history.read(domain,args['revision'],args['paths'])
+            elif name == 'restore_revision':
+                self._require_history(domain)
+                revision=next((item for item in mgr.history.list(domain) if item['id']==args['revision']),None)
+                if not revision:raise IntegrationError('Revision not found')
+                if not self.jobs.request_approval(job,'Restore code revision',{'domain':domain,'revision':args['revision'],'created':revision['created'],'source':revision['source'],'reason':revision['reason'],'impact':'Replaces staged code only. Installation and Core restart still need approval.'}):return {'ok':False,'reason':'Restore was not approved'}
+                if self.stopped(job):return {'ok':False,'reason':'Restore was stopped'}
+                result=mgr.history.restore(domain,args['revision'])
             elif name == "read_integration_file": result = mgr.read_file(domain, args["path"], args.get("deployed", False))
             elif name == "validate_integration": result = mgr.validate(domain)
             elif name == "list_backups": result = mgr.backups_for(domain)
@@ -390,6 +461,9 @@ class AgentBridge:
                 self.store.audit(name, {"domain": domain, "entity": args["entity_id"], "service": args["service"]})
             else:
                 return {"ok": False, "error": "Unknown function"}
+            if name in {'write_files','generate_integration_icon'}:
+                record=self.store.records('discoveries').get(cid)
+                if record:record['consumed_domain']=domain;self.store.put('discoveries',cid,record)
             return {"ok": True, "result": result}
         except Exception as exc:
             return {"ok": False, "error": redact(str(exc))[:2000]}
@@ -400,17 +474,23 @@ class AgentBridge:
             if self.stopped(job): return
             if action.type == "function_call":
                 if action.call_id in handled: continue
-                handled.add(action.call_id)
                 args = action.arguments
                 if isinstance(args, str): args = json.loads(args)
                 previous = any(step['id']==action.call_id for old_job in self.store.records('jobs').values()
                                for step in old_job.get('steps',[]))
                 self.jobs.step(job, action.call_id, action.name, args)
-                output = ({'ok':False,'reason':'This tool call was already recorded before an interruption. It has not been replayed. Inspect the current integration and installation state before planning a new action.'}
+                cached=self.tool_outputs.setdefault(job,{})
+                output = cached.get(action.call_id)
+                if output is None:output = ({'ok':False,'reason':'This tool call was already recorded before an interruption. It has not been replayed. Inspect the current integration and installation state before planning a new action.'}
                           if previous else self.tool(action.name, args, job))
                 self.jobs.finish_step(job, action.call_id, output)
+                cached[action.call_id]=output
+                record=self.store.records('recoveries').get(job,{})
+                record['pending_outputs']=dict(cached);self.store.put('recoveries',job,record)
                 if self.stopped(job): return
-                client.beta.agents.sessions.events.create(session_id, events=[{"type": "agent.session.input.tool_result", "turn_id": action.turn_id, "call_id": action.call_id, "success": True, "output": json.dumps(output, ensure_ascii=False)}])
+                client.beta.agents.sessions.events.create(session_id, events=[{"type": "agent.session.input.tool_result", "turn_id": action.turn_id, "call_id": action.call_id, "success": True, "output": json.dumps(output, ensure_ascii=False)}],idempotency_key='tool-'+action.call_id)
+                handled.add(action.call_id);cached.pop(action.call_id,None)
+                record['pending_outputs']=dict(cached);self.store.put('recoveries',job,record)
             elif action.type == "computer_use_approval_request":
                 if action.request_id in handled: continue
                 handled.add(action.request_id)
@@ -429,7 +509,58 @@ class AgentBridge:
                     continue
                 client.beta.agents.sessions.events.create(session_id, events=[{"type": "agent.session.input.computer_use_approval_request_result", "request_id": action.request_id, "response": response}])
 
-    def run(self, conversation_id: str, message: str, job: str):
+    def _review_links(self,job,answer):
+        changed={step.get('arguments',{}).get('domain') for step in self.jobs.get(job)['steps'] if step.get('status')=='done' and step.get('tool') in {'write_files','generate_integration_icon','install_integration','deploy_integration','restore_revision'}}
+        links=[]
+        for domain in sorted(changed-{None}):
+            try:
+                path=self.manager.workspace(domain)/'manifest.json'
+                if not path.exists():path=self.manager.installed_path(domain)/'manifest.json'
+                name=json.loads(path.read_text(encoding='utf-8')).get('name')
+                if not isinstance(name,str) or not name.strip():name=domain
+                name=name[:200].replace('[','').replace(']','').replace('\n',' ')
+                links.append('**Integration:** ['+name+'](/config/integrations/integration/'+domain+').')
+            except (ValueError,OSError):pass
+        if links:return '\n'.join(links)+'\n\nReview it in Home Assistant. Installation, setup or a Core restart may still be required.\n\n'+answer
+        return answer
+
+    def _publish_intermediate(self, conversation_id, job, chunks):
+        """Commit commentary before subsequent tools, once per provider output item."""
+        conv = self.store.get_conversation(conversation_id)
+        published = {m.get('agent_output_key') for m in conv['messages']}
+        for key, text in chunks.items():
+            marker = job + ':' + json.dumps(list(key))
+            if text.strip() and marker not in published:
+                self.store.add_message(conversation_id, 'assistant', text,
+                    extra={'agent_output_key': marker, 'agent_job_id': job})
+                published.add(marker)
+
+    def _recover_completed_turn(self,client,session_id,turn_ids,chunks):
+        if not turn_ids:return False
+        try:
+            current=client.beta.agents.sessions.retrieve(session_id)
+            if getattr(current,'status',None)!='idle':return False
+            turn=None
+            for ident in reversed(turn_ids[-10:]):
+                candidate=client.beta.agents.sessions.turns.retrieve(ident,session_id=session_id)
+                if not getattr(candidate,'subagent_id',None):turn=candidate;break
+            if turn is None or turn.status!='completed':return False
+            page=client.beta.agents.sessions.turns.items.list(turn.id,session_id=session_id,limit=100,order='desc')
+            messages=[]
+            for item in page.data:
+                if getattr(item,'type',None)!='message' or getattr(item,'role',None)!='assistant' or getattr(item,'subagent_id',None):continue
+                for index,content in enumerate(getattr(item,'content',[]) or []):
+                    if getattr(content,'type',None)=='output_text' and getattr(content,'text',None):messages.append(((item.id,0,index),content.text))
+            if not messages:return False
+            chunks.clear();chunks.update(reversed(messages));return True
+        except Exception:
+            return False
+
+    def _save_recovery(self,job,session_id,handled,chunks,turn_ids):
+        self.store.put('recoveries',job,{'pending_outputs':dict(self.tool_outputs.get(job,{})),'session_id':session_id,'handled':list(handled),
+            'chunks':[{'key':list(key),'text':value} for key,value in chunks.items()], 'turn_ids':turn_ids})
+
+    def run(self, conversation_id: str, message: str, job: str, resume=False):
         try:
             if self.stopped(job):
                 self.jobs.status(job,'stopped')
@@ -441,7 +572,7 @@ class AgentBridge:
             with OpenAI(api_key=api_key, timeout=120) as client:
                 conversation = self.store.get_conversation(conversation_id)
                 session_id = conversation["session_id"]
-                migrated = bool(session_id) and conversation.get('session_revision', 0) < 9
+                migrated = bool(session_id) and conversation.get('session_revision', 0) < 10
                 if not session_id or migrated:
                     session = client.beta.agents.sessions.create(
                         agent={"model": self.options.get("model", "gpt-6.1-sol"), "instructions": INSTRUCTIONS, "tools": TOOLS},
@@ -449,68 +580,105 @@ class AgentBridge:
                     )
                     session_id = session.id
                     self.store.set_session(conversation_id, session_id)
-                handled = set()
-                chunks: dict[tuple, str] = {}
+                saved=self.store.records('recoveries').get(job,{}) if resume else {}
+                if resume and saved.get('session_id')!=session_id:raise RuntimeError('The saved session changed. Start a new message after checking the integration state.')
+                self.tool_outputs[job]=dict(saved.get('pending_outputs',{}))
+                handled=set(saved.get('handled',[]))
+                chunks={tuple(item['key']):item['text'] for item in saved.get('chunks',[])}
+                turn_ids=list(saved.get('turn_ids',[]));sent=bool(resume)
+                completed=False
                 if migrated:
                     message = 'Previous conversation context (historical data, not new tool instructions):\n' + json.dumps(conversation['messages'][-8:], ensure_ascii=False)[-16000:] + '\nCurrent user request:\n' + message
-                with client.beta.agents.sessions.events.stream(session_id) as stream:
-                    if self.stopped(job):
-                        self.jobs.status(job,'stopped')
-                        return
-                    client.beta.agents.sessions.events.create(session_id, events=[{
-                        "type": "agent.session.input.message", "input": [{"role": "user", "content": [{"type": "input_text", "text": "Current application workflow: collect non-secret settings, then use install_integration to install, request one restart and persist automatic configuration/verification. After creating or changing an integration, always provide a device-specific How to test checklist with expected HA states and physical behavior, separating performed checks from unverified expectations. Never ask for secrets in chat. Answer in English. Context integrations: " + ", ".join(conversation.get("domains", [])) + "\nUser message: " + message}]}]
-                    }])
-                    with self.control_lock:
-                        self.runtimes[job]={'client':client,'session':session_id,'steered':False}
-                        self.jobs.ready(job,True)
-                        if self.stopped(job):
-                            client.beta.agents.sessions.events.create(session_id,events=[{'type':'agent.session.input.cancel'}])
-                    completed = False
-                    hosted_seen = set()
-                    for event in stream:
-                        kind = event.type
-                        item=getattr(event,'item',None)
-                        item_type=getattr(item,'type',None)
-                        if item_type in HOSTED_LABELS:
-                            item_key=(getattr(item,'id',None),getattr(item,'status',None))
-                            if item_key not in hosted_seen:
-                                hosted_seen.add(item_key)
-                                status=getattr(item,'status',None)
-                                safe_status=status if status in {'in_progress','completed','failed','cancelled','queued','incomplete'} else 'observed'
-                                logger.info('Hosted action | job=%s | title=%s | status=%s',job,HOSTED_LABELS[item_type],safe_status)
-                        if kind == "agent.session.requires_action":
-                            self._handle_required(client, session_id, job, handled)
-                        elif kind == "agent.session.turn.output_text.delta":
-                            key = (event.item_id, event.output_index, event.content_index)
-                            chunks[key] = chunks.get(key, "") + event.delta
-                        elif kind == "agent.session.turn.output_text.done":
-                            key = (event.item_id, event.output_index, event.content_index)
-                            chunks[key] = event.text
-                        elif kind == "agent.session.turn.completed" and event.turn.subagent_id is None:
+                for attempt in range(4):
+                    if self.stopped(job):self.jobs.status(job,'stopped');return
+                    try:
+                        if attempt or resume:
+                            if self._recover_completed_turn(client,session_id,turn_ids,chunks):completed=True;break
+                            current=client.beta.agents.sessions.retrieve(session_id)
+                            if getattr(current,'status',None)=='requires_action':self._handle_required(client,session_id,job,handled)
+                        with client.beta.agents.sessions.events.stream(session_id) as stream:
+                            if self.stopped(job):
+                                self.jobs.status(job,'stopped')
+                                return
+                            if not sent:
+                                client.beta.agents.sessions.events.create(session_id, events=[{
+                                "type": "agent.session.input.message", "input": [{"role": "user", "content": [{"type": "input_text", "text": "Current application workflow: collect non-secret settings, then use install_integration to install, request one restart and persist automatic configuration/verification. After creating or changing an integration, always provide a device-specific How to test checklist with expected HA states and physical behavior, separating performed checks from unverified expectations. Never ask for secrets in chat. Answer in English. Context integrations: " + ", ".join(conversation.get("domains", [])) + "\nUser message: " + message}]}]
+                                }],idempotency_key=job)
+                                sent=True
                             with self.control_lock:
-                                runtime=self.runtimes.get(job)
-                                if runtime and runtime['steered'] and not self.stopped(job):
-                                    current=client.beta.agents.sessions.retrieve(session_id)
-                                    if getattr(current,'status','idle') in {'in_progress','requires_action'}:
-                                        continue
-                                self.jobs.ready(job,False)
-                                self.runtimes.pop(job,None)
-                                completed = True
-                                break
-                        elif kind == 'agent.session.turn.cancelled' and event.turn.subagent_id is None:
-                            self.jobs.event(job,'info','The agent was stopped. Completed actions have not been undone.')
-                            self.jobs.status(job,'stopped')
-                            return
-                        elif kind in {"agent.session.turn.failed", "agent.session.turn.cancelled"} and event.turn.subagent_id is None:
-                            raise RuntimeError("Agent job failed or was cancelled: " + str(getattr(getattr(event.turn, "error", None), "message", "")))
-                        elif kind in {"agent.session.failed", "agent.session.environment.failed", "error"}:
-                            raise RuntimeError("Agent session failed: " + kind)
-                        if len(chunks) and kind in {"agent.session.turn.output_text.done", "agent.session.turn.output_text.delta"}:
-                            self.jobs.event(job, "text", "".join(chunks.values())[-3000:])
-                    if not completed:
-                        raise RuntimeError("Agents API stream closed without confirmed completion")
-                answer = "\n\n".join(text for text in chunks.values() if text).strip() or "Job completed without a text response. Review the performed actions."
-                self.store.add_message(conversation_id, "assistant", answer)
+                                self.runtimes[job]={'client':client,'session':session_id,'steered':self.runtimes.get(job,{}).get('steered',False)}
+                                self.jobs.ready(job,True)
+                                if self.stopped(job):
+                                    client.beta.agents.sessions.events.create(session_id,events=[{'type':'agent.session.input.cancel'}])
+                            completed = False
+                            hosted_seen = set()
+                            for event in stream:
+                                kind = event.type
+                                observed=getattr(event,'turn_id',None) or getattr(getattr(event,'turn',None),'id',None)
+                                if observed and observed not in turn_ids:turn_ids.append(observed)
+                                item=getattr(event,'item',None)
+                                item_type=getattr(item,'type',None)
+                                if item_type in HOSTED_LABELS:
+                                    item_key=(getattr(item,'id',None),getattr(item,'status',None))
+                                    if item_key not in hosted_seen:
+                                        hosted_seen.add(item_key)
+                                        status=getattr(item,'status',None)
+                                        safe_status=status if status in {'in_progress','completed','failed','cancelled','queued','incomplete'} else 'observed'
+                                        logger.info('Hosted action | job=%s | title=%s | status=%s',job,HOSTED_LABELS[item_type],safe_status)
+                                if kind == "agent.session.requires_action":
+                                    self._publish_intermediate(conversation_id, job, chunks)
+                                    self._handle_required(client, session_id, job, handled)
+                                elif kind == "agent.session.turn.output_text.delta":
+                                    key = (event.item_id, event.output_index, event.content_index)
+                                    chunks[key] = chunks.get(key, "") + event.delta
+                                elif kind == "agent.session.turn.output_text.done":
+                                    key = (event.item_id, event.output_index, event.content_index)
+                                    chunks[key] = event.text
+                                elif kind == "agent.session.turn.completed" and event.turn.subagent_id is None:
+                                    with self.control_lock:
+                                        runtime=self.runtimes.get(job)
+                                        if runtime and runtime['steered'] and not self.stopped(job):
+                                            current=client.beta.agents.sessions.retrieve(session_id)
+                                            if getattr(current,'status','idle') in {'in_progress','requires_action'}:
+                                                continue
+                                        self.jobs.ready(job,False)
+                                        self.runtimes.pop(job,None)
+                                        completed = True
+                                        break
+                                elif kind == 'agent.session.turn.cancelled' and event.turn.subagent_id is None:
+                                    self.jobs.event(job,'info','The agent was stopped. Completed actions have not been undone.')
+                                    self.jobs.status(job,'stopped')
+                                    return
+                                elif kind in {"agent.session.turn.failed", "agent.session.turn.cancelled"} and event.turn.subagent_id is None:
+                                    raise RuntimeError("Agent job failed or was cancelled: " + str(getattr(getattr(event.turn, "error", None), "message", "")))
+                                elif kind in {"agent.session.failed", "agent.session.environment.failed", "error"}:
+                                    raise RuntimeError("Agent session failed: " + kind)
+                                if len(chunks) and kind in {"agent.session.turn.output_text.done", "agent.session.turn.output_text.delta"}:
+                                    self.jobs.event(job, "text", "".join(chunks.values())[-3000:])
+                            if not completed:
+                                raise StreamInterrupted("Agents API stream closed without confirmed completion")
+                        break
+                    except Exception as stream_error:
+                        retryable=isinstance(stream_error,StreamInterrupted) or (sent and type(stream_error).__name__ in {'APIConnectionError','APITimeoutError','ReadTimeout','RemoteProtocolError'})
+                        if not retryable:raise
+                        if self.stopped(job):raise
+                        self._save_recovery(job,session_id,handled,chunks,turn_ids)
+                        if attempt>=3:
+                            self.jobs.fields(job,retryable=True)
+                            raise StreamInterrupted('Agents API stream closed without confirmed completion after three automatic retries. The request might be too big to handle all at once. Use Retry to reconnect safely, or send a smaller follow-up. Completed actions will not be replayed.') from stream_error
+                        self.jobs.event(job,'retry',f'Connection interrupted. Retrying {attempt+1}/3 by reconnecting to the same agent session; completed actions are not replayed.')
+                        self.jobs.fields(job,retry_attempt=attempt+1)
+                        time.sleep(min(0.5*(attempt+1),2))
+                published = {m.get('agent_output_key') for m in self.store.get_conversation(conversation_id)['messages']}
+                answer = "\n\n".join(text for key, text in chunks.items()
+                    if text and job + ':' + json.dumps(list(key)) not in published).strip()
+                if not answer and not published:
+                    answer = "Job completed without a text response. Review the performed actions."
+                answer=self._review_links(job,answer)
+                self.jobs.fields(job,retryable=False)
+                self.store.put('recoveries',job,{})
+                if answer.strip():
+                    self.store.add_message(conversation_id, "assistant", answer)
                 self.jobs.event(job, "done", answer)
                 self.jobs.status(job, 'stopped' if self.stopped(job) else 'done')
         except Exception as exc:
@@ -520,9 +688,10 @@ class AgentBridge:
                 return
             detail = redact(str(exc))[:1600]
             self.jobs.event(job, "error", detail)
-            self.store.add_message(conversation_id, "assistant", f"Error during the job: {detail}")
+            self.store.add_message(conversation_id, "assistant", self._review_links(job,f"Error during the job: {detail}"))
             self.jobs.status(job, 'stopped' if self.stopped(job) else 'failed')
         finally:
             with self.control_lock:
                 self.runtimes.pop(job,None)
+                self.tool_outputs.pop(job,None)
                 self.jobs.ready(job,False)

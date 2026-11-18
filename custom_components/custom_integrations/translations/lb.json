@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Erstellt a geréiert personaliséiert Integratioune mat engem KI-Agent. Konfiguréiert en API-Schlëssel fir OpenAI Platform. Generéierte Code kann no der Geneemegung mat de Rechter vun Home Assistant lafen.",
+        "data": {
+          "openai_api_key": "OpenAI-API-Schlëssel",
+          "model": "Modell",
+          "auto_deploy": "D'Bereetstelle vu Code automatesch geneemegen",
+          "auto_restart": "Neistarte vu Core automatesch geneemegen"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Gitt en OpenAI-API-Schlëssel an.",
+      "missing_model": "Gitt e Modellnumm an."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations ass scho konfiguréiert."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Optioune fir Custom Integrations",
+        "description": "Loosst den API-Schlëssel eidel fir den aktuelle Schlëssel ze behalen. Apparatester an d'Deinstallatioun erfuerderen ëmmer eng ausdrécklech Geneemegung.",
+        "data": {
+          "openai_api_key": "Neien OpenAI-API-Schlëssel",
+          "model": "Modell",
+          "auto_deploy": "D'Bereetstelle vu Code automatesch geneemegen",
+          "auto_restart": "Neistarte vu Core automatesch geneemegen"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Gitt e Modellnumm an."
+    }
+  }
+}

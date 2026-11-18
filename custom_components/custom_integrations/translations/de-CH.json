@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Erstell und verwalt benutzerdefinierti Integratione mit eme KI-Agent. Konfigurier en API-Schlüssel für d OpenAI Platform. Generierte Code cha nach de Genehmigung mit de Berechtigunge vo Home Assistant usgführt werde.",
+        "data": {
+          "openai_api_key": "OpenAI-API-Schlüssel",
+          "model": "Modell",
+          "auto_deploy": "Bereitstellig vo Code automatisch genehmige",
+          "auto_restart": "Neustarts vo Core automatisch genehmige"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Gib en OpenAI-API-Schlüssel ii.",
+      "missing_model": "Gib en Modellname ii."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations isch scho iigrichtet."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Optione für Custom Integrations",
+        "description": "Lah de API-Schlüssel leer, zum de aktuell Schlüssel z bhalte. Grätetests und d Deinstallation bruuched immer e usdrücklichi Genehmigung.",
+        "data": {
+          "openai_api_key": "Neue OpenAI-API-Schlüssel",
+          "model": "Modell",
+          "auto_deploy": "Bereitstellig vo Code automatisch genehmige",
+          "auto_restart": "Neustarts vo Core automatisch genehmige"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Gib en Modellname ii."
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "AI ਏਜੰਟ ਨਾਲ ਕਸਟਮ ਇੰਟੀਗ੍ਰੇਸ਼ਨ ਬਣਾਓ ਅਤੇ ਸੰਭਾਲੋ। OpenAI Platform API ਕੁੰਜੀ ਕੌਂਫਿਗਰ ਕਰੋ। ਮਨਜ਼ੂਰੀ ਤੋਂ ਬਾਅਦ ਬਣਾਇਆ ਕੋਡ Home Assistant ਦੀਆਂ ਇਜਾਜ਼ਤਾਂ ਨਾਲ ਚੱਲ ਸਕਦਾ ਹੈ।",
+        "data": {
+          "openai_api_key": "OpenAI API ਕੁੰਜੀ",
+          "model": "ਮਾਡਲ",
+          "auto_deploy": "ਕੋਡ ਤੈਨਾਤੀ ਨੂੰ ਆਪਣੇ ਆਪ ਮਨਜ਼ੂਰ ਕਰੋ",
+          "auto_restart": "Core ਮੁੜ ਚਾਲੂ ਕਰਨ ਨੂੰ ਆਪਣੇ ਆਪ ਮਨਜ਼ੂਰ ਕਰੋ"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "OpenAI API ਕੁੰਜੀ ਦਰਜ ਕਰੋ।",
+      "missing_model": "ਮਾਡਲ ਦਾ ਨਾਮ ਦਰਜ ਕਰੋ।"
+    },
+    "abort": {
+      "already_configured": "Custom Integrations ਪਹਿਲਾਂ ਹੀ ਕੌਂਫਿਗਰ ਹੈ।"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations ਚੋਣਾਂ",
+        "description": "ਮੌਜੂਦਾ ਕੁੰਜੀ ਰੱਖਣ ਲਈ API ਕੁੰਜੀ ਖਾਲੀ ਛੱਡੋ। ਡਿਵਾਈਸ ਟੈਸਟਾਂ ਅਤੇ ਅਣਇੰਸਟਾਲ ਲਈ ਹਮੇਸ਼ਾ ਸਪਸ਼ਟ ਮਨਜ਼ੂਰੀ ਲੋੜੀਂਦੀ ਹੈ।",
+        "data": {
+          "openai_api_key": "ਬਦਲਵੀਂ OpenAI API ਕੁੰਜੀ",
+          "model": "ਮਾਡਲ",
+          "auto_deploy": "ਕੋਡ ਤੈਨਾਤੀ ਨੂੰ ਆਪਣੇ ਆਪ ਮਨਜ਼ੂਰ ਕਰੋ",
+          "auto_restart": "Core ਮੁੜ ਚਾਲੂ ਕਰਨ ਨੂੰ ਆਪਣੇ ਆਪ ਮਨਜ਼ੂਰ ਕਰੋ"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "ਮਾਡਲ ਦਾ ਨਾਮ ਦਰਜ ਕਰੋ।"
+    }
+  }
+}

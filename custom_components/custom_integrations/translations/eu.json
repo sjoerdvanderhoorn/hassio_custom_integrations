@@ -1,0 +1,41 @@
+{
+  "title": "Custom Integrations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Custom Integrations",
+        "description": "Sortu eta mantendu integrazio pertsonalizatuak AA agente batekin. Konfiguratu OpenAI Platform-eko API gako bat. Sortutako kodea Home Assistant-en baimenekin exekutatu daiteke onartu ondoren.",
+        "data": {
+          "openai_api_key": "OpenAI API gakoa",
+          "model": "Modeloa",
+          "auto_deploy": "Onartu automatikoki kodea hedatzea",
+          "auto_restart": "Onartu automatikoki Core berrabiaraztea"
+        }
+      }
+    },
+    "error": {
+      "missing_key": "Sartu OpenAI API gako bat.",
+      "missing_model": "Sartu modeloaren izena."
+    },
+    "abort": {
+      "already_configured": "Custom Integrations dagoeneko konfiguratuta dago."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Custom Integrations aukerak",
+        "description": "Utzi API gakoa hutsik uneko gakoa mantentzeko. Gailuen probek eta desinstalazioak berariazko onarpena behar dute beti.",
+        "data": {
+          "openai_api_key": "Ordezko OpenAI API gakoa",
+          "model": "Modeloa",
+          "auto_deploy": "Onartu automatikoki kodea hedatzea",
+          "auto_restart": "Onartu automatikoki Core berrabiaraztea"
+        }
+      }
+    },
+    "error": {
+      "missing_model": "Sartu modeloaren izena."
+    }
+  }
+}

@@ -4,7 +4,7 @@ const ASSETS='/custom_integrations/frontend/';
 const previous=window.__customIntegrationsExtension;
 if(previous)previous.abort();
 const controller=new AbortController();window.__customIntegrationsExtension=controller;
-let snapshot=null,lastFetch=0,pending=false,modal=null;
+let snapshot=window.__ciManagedSnapshot || null,lastFetch=0,pending=false,modal=null,available=true;
 const element=(tag,text)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;return el;};
 const host=()=>document.querySelector('home-assistant');
 const currentHass=()=>host()?.hass;
@@ -98,7 +98,7 @@ document.addEventListener('click',event=>{
   const button=path.find(node=>node?.localName==='ha-button' && node.getAttribute('slot')==='fab');
   if(!button || !path.some(node=>node?.localName==='ha-config-integrations-dashboard'))return;
   if(nativeBypass.has(button)){nativeBypass.delete(button);return;}
-  if(controller.signal.aborted || !snapshot || !currentHass()?.user?.is_admin || location.pathname!=='/config/integrations/dashboard')return;
+  if(controller.signal.aborted || !available || !currentHass()?.user?.is_admin || location.pathname!=='/config/integrations/dashboard')return;
   event.preventDefault();event.stopImmediatePropagation();openChoice(button);
 },{capture:true,signal:controller.signal});
 for(const [name,type] of [['ci-chat-modal',CIChatModal],['ci-integration-actions',CIIntegrationActions],['ci-add-integration-choice',CIAddIntegrationChoice]])if(!customElements.get(name))customElements.define(name,type);
@@ -111,9 +111,9 @@ function removeExtensions(){
 async function tick(){
   if(controller.signal.aborted)return;
   try{
-    if(!location.pathname.startsWith('/config/integrations/') || !currentHass()?.user?.is_admin)return;
-    if(Date.now()-lastFetch>5000 && !pending){pending=true;try{snapshot=await (await api('api/state')).json();lastFetch=Date.now();}catch(_){snapshot=null;removeExtensions();}finally{pending=false;}}
-    if(!snapshot)return;
+    if(!currentHass()?.user?.is_admin){removeExtensions();return;}
+    if(Date.now()-lastFetch>5000 && !pending){pending=true;api('api/state').then(response=>response.json()).then(data=>{snapshot=data;window.__ciManagedSnapshot={integrations:data.integrations};available=true;lastFetch=Date.now();scheduleTick();}).catch(()=>{snapshot=null;window.__ciManagedSnapshot=null;available=false;lastFetch=Date.now();removeExtensions();}).finally(()=>pending=false);}
+    if(!snapshot || !location.pathname.startsWith('/config/integrations/'))return;
     if(location.pathname==='/config/integrations/dashboard'){
       deepFind(document,'ha-config-integrations-dashboard')?.shadowRoot?.querySelectorAll('ci-integrations-section').forEach(el=>el.remove());
       const dashboard=deepFind(document,'ha-config-integrations-dashboard');
@@ -147,7 +147,23 @@ async function tick(){
       }
     }
   }catch(error){console.warn('Custom Integrations could not attach its controls. Native Home Assistant controls are unchanged.');}
-  finally{if(!controller.signal.aborted)setTimeout(tick,1000);}
+  finally{}
 }
-controller.signal.addEventListener('abort',()=>{removeExtensions();modal?.remove();chooser?.remove();});
-tick();
+let scheduled=false;
+const watchers=new Map();
+function scheduleTick(){
+  if(scheduled || controller.signal.aborted)return;scheduled=true;
+  requestAnimationFrame(()=>{scheduled=false;if(controller.signal.aborted)return;watchRoots(document);tick();});
+}
+function watchRoots(root){
+  for(const [known,observer] of watchers)if(known.host && !known.host.isConnected){observer.disconnect();watchers.delete(known);}
+  if(!watchers.has(root)){const observer=new MutationObserver(scheduleTick);observer.observe(root,{childList:true,subtree:true});watchers.set(root,observer);}
+  const routing=new Set(['home-assistant','home-assistant-main','partial-panel-resolver','ha-panel-config']);
+  const integrations=new Set(['ha-config-integrations','ha-config-integrations-dashboard','ha-config-integration-page','hass-tabs-subpage','hass-subpage','ha-integration-card']);
+  for(const el of root.querySelectorAll('*'))if(el.shadowRoot && (routing.has(el.localName) || (location.pathname.startsWith('/config/integrations/') && integrations.has(el.localName))))watchRoots(el.shadowRoot);
+}
+window.addEventListener('location-changed',scheduleTick,{signal:controller.signal});
+window.addEventListener('popstate',scheduleTick,{signal:controller.signal});
+const fallback=setInterval(scheduleTick,1000);
+controller.signal.addEventListener('abort',()=>{clearInterval(fallback);for(const observer of watchers.values())observer.disconnect();watchers.clear();removeExtensions();modal?.remove();chooser?.remove();});
+watchRoots(document);tick();

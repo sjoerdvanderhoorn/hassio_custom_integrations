@@ -19,6 +19,7 @@ Changes since published version 1.0.1 (including the improvements previously sup
 - Enter sends a message; Shift+Enter and Ctrl+Enter insert a new line. Automatic scrolling follows new messages.
 - Faster attachment of the Add integration choice and Edit custom integration controls during navigation and page updates.
 - Interrupted agent streams reconnect automatically up to three times, with visible retry notes. If recovery still fails, a Retry button reconnects to the same job and explains that a smaller request may help.
+- Snapshot symbolic-link rejection uses the normal integration validation error, keeping file-write error handling consistent.
 - Recovery preserves completed tool results to avoid repeating actions when acknowledging a result fails.
 
 ### Translations

@@ -227,3 +227,16 @@ def test_intermediate_commentary_is_ordered_and_idempotent(bridge):
  assert steps[1]['after_message']==1
  assert messages[0]['content']==chunks[('message-1',0,0)]
 
+
+
+def test_snapshot_symlink_rejection_uses_integration_error(bridge,monkeypatch):
+ from pathlib import Path
+ from app.integrations import IntegrationError
+ b,_,_=bridge
+ root=b.manager.workspace('sample_light');root.mkdir()
+ nested=root/'nested';nested.mkdir()
+ original=Path.is_symlink
+ monkeypatch.setattr(Path,'is_symlink',lambda path:path==nested or original(path))
+ with pytest.raises(IntegrationError,match='linked source'):
+  b.manager.write_files('sample_light',[{'path':'nested/test.py','content':'x=1'}])
+ assert not (nested/'test.py').exists()

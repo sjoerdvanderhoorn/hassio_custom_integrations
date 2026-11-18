@@ -23,13 +23,13 @@ class History:
         return target
 
     def save(self, domain, reason, source=None):
-        from .integrations import MARKER, MAX_FILE, MAX_TOTAL, safe_relative
+        from .integrations import MARKER, MAX_FILE, MAX_TOTAL, safe_relative, IntegrationError
         source = source or self.manager.workspace(domain)
         if not source.exists(): return None
-        if source.is_symlink(): raise ValueError('Snapshot source must not be a link')
+        if source.is_symlink(): raise IntegrationError('Snapshot source must not be a link')
         files = []; total = 0; digest = hashlib.sha256()
         for path in sorted(source.rglob('*')):
-            if path.is_symlink(): raise ValueError('Cannot snapshot linked source')
+            if path.is_symlink(): raise IntegrationError('Cannot snapshot linked source')
             if not path.is_file(): continue
             name = path.relative_to(source).as_posix()
             if name == MARKER or '__pycache__' in path.parts or path.suffix == '.pyc': continue
